@@ -1,1 +1,1985 @@
-hi
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlightPoints — Influencer Strategy Playbook</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --ink: #0d0d0d;
+    --paper: #f5f0e8;
+    --cream: #ede8dc;
+    --accent: #e8510a;
+    --accent2: #1a6bff;
+    --accent3: #00b37d;
+    --accent4: #f5a623;
+    --seg1: #7c3aed;
+    --seg2: #0ea5e9;
+    --seg3: #16a34a;
+    --seg4: #e8510a;
+    --muted: #6b6660;
+    --border: rgba(13,13,13,0.10);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,sans-serif;
+    background:var(--paper); color:var(--ink); font-size:15px; line-height:1.65;
+    overflow-x:hidden; -webkit-font-smoothing:antialiased;
+  }
+
+  /* HERO */
+  .hero { background:var(--ink); color:var(--paper); padding:80px 60px 72px; position:relative; overflow:hidden; }
+  .hero::before { content:''; position:absolute; top:-120px; right:-120px; width:500px; height:500px; background:radial-gradient(circle,rgba(232,81,10,0.22) 0%,transparent 65%); pointer-events:none; }
+  .hero::after { content:''; position:absolute; bottom:-100px; left:20%; width:380px; height:380px; background:radial-gradient(circle,rgba(26,107,255,0.15) 0%,transparent 65%); pointer-events:none; }
+  .hero-eyebrow { font-size:11px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); margin-bottom:20px; }
+  .hero h1 { font-size:clamp(40px,6vw,76px); font-weight:800; line-height:1.02; max-width:820px; margin-bottom:28px; letter-spacing:-0.03em; }
+  .hero h1 em { font-style:normal; color:var(--accent); }
+  .hero-sub { font-size:16px; font-weight:300; max-width:600px; color:rgba(245,240,232,0.70); line-height:1.75; margin-bottom:48px; }
+  .hero-stats { display:flex; gap:48px; flex-wrap:wrap; }
+  .hero-stat-num { font-size:34px; font-weight:800; color:var(--paper); line-height:1; letter-spacing:-0.03em; }
+  .hero-stat-label { font-size:11px; font-weight:500; color:rgba(245,240,232,0.50); letter-spacing:0.09em; text-transform:uppercase; margin-top:5px; }
+
+  /* LAYOUT */
+  .container { max-width:1200px; margin:0 auto; padding:0 48px; }
+  .section { padding:72px 0; }
+  .section + .section { border-top:1px solid var(--border); }
+  .section-label { font-size:10.5px; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); margin-bottom:12px; }
+  .section-title { font-size:clamp(24px,3.5vw,38px); font-weight:800; line-height:1.12; letter-spacing:-0.025em; max-width:700px; margin-bottom:48px; }
+
+  /* BLUF */
+  .bluf-box { background:var(--ink); color:var(--paper); border-radius:16px; padding:44px 48px; position:relative; overflow:hidden; }
+  .bluf-box::before { content:'★'; font-size:220px; position:absolute; right:-20px; top:-40px; opacity:0.035; font-family:serif; line-height:1; }
+  .bluf-box p { font-size:15.5px; line-height:1.85; max-width:820px; color:rgba(245,240,232,0.86); }
+  .bluf-box strong { color:var(--accent); font-weight:600; }
+
+  /* STRATEGY SHIFT BANNER */
+  .strategy-shift {
+    background:var(--ink); color:var(--paper); border-radius:14px; padding:36px 40px;
+    display:grid; grid-template-columns:1fr 1fr 1fr; gap:28px; margin-bottom:0;
+  }
+  .shift-item { }
+  .shift-num { font-size:36px; font-weight:900; color:var(--accent); letter-spacing:-0.03em; line-height:1; margin-bottom:8px; }
+  .shift-label { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:rgba(245,240,232,0.5); margin-bottom:6px; }
+  .shift-desc { font-size:13px; color:rgba(245,240,232,0.75); line-height:1.6; }
+
+  /* CONTRACTING TIERS */
+  .tier-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .tier-card { background:white; border-radius:12px; padding:26px; border:1px solid var(--border); position:relative; overflow:hidden; }
+  .tier-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+  .tier-a::before { background:var(--seg3); }
+  .tier-b::before { background:var(--seg2); }
+  .tier-c::before { background:var(--accent); }
+  .tier-label { font-size:10px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+  .tier-name { font-size:19px; font-weight:800; letter-spacing:-0.02em; margin-bottom:4px; }
+  .tier-range { font-size:13px; color:var(--muted); margin-bottom:16px; }
+  .tier-items { list-style:none; }
+  .tier-items li { font-size:13px; padding:7px 0; border-bottom:1px solid var(--border); display:flex; gap:8px; align-items:flex-start; }
+  .tier-items li:last-child { border-bottom:none; }
+  .tier-dot { width:6px; height:6px; border-radius:50%; background:var(--accent); flex-shrink:0; margin-top:6px; }
+
+  /* PLATFORM DATA */
+  .platform-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px; margin-bottom:48px; }
+  .platform-card { background:white; border-radius:12px; padding:26px; border:1px solid var(--border); position:relative; overflow:hidden; }
+  .platform-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+  .platform-card.yt::before { background:#ff0000; }
+  .platform-card.ig::before { background:linear-gradient(90deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
+  .platform-card.fb::before { background:#1877f2; }
+  .platform-card.tt::before { background:#010101; }
+  .platform-card.rd::before { background:#ff4500; }
+  .platform-card.pd::before { background:#8940fa; }
+  .platform-icon { font-size:26px; margin-bottom:12px; }
+  .platform-name { font-size:17px; font-weight:700; margin-bottom:6px; letter-spacing:-0.02em; }
+  .platform-reach { font-size:30px; font-weight:800; color:var(--accent); line-height:1; margin:12px 0 4px; letter-spacing:-0.03em; }
+  .platform-reach-label { font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; font-weight:500; }
+  .platform-details { margin-top:16px; }
+  .platform-detail-row { display:flex; justify-content:space-between; align-items:center; padding:7px 0; border-bottom:1px solid var(--border); font-size:12.5px; }
+  .platform-detail-row:last-child { border-bottom:none; }
+  .platform-detail-key { color:var(--muted); }
+  .platform-detail-val { font-weight:600; }
+  .platform-role { margin-top:16px; background:var(--cream); border-radius:8px; padding:10px 14px; font-size:12.5px; line-height:1.55; }
+
+  /* CHARTS */
+  .charts-row { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:24px; }
+  .chart-box { background:white; border-radius:12px; padding:28px; border:1px solid var(--border); overflow:hidden; min-width:0; }
+  .chart-title { font-size:14px; font-weight:700; margin-bottom:20px; letter-spacing:-0.01em; }
+  .chart-canvas-wrap { position:relative; height:240px; overflow:hidden; }
+  .chart-full { grid-column:1 / -1; }
+
+  /* SEGMENTS */
+  .segments-nav { display:flex; gap:8px; margin-bottom:36px; flex-wrap:wrap; }
+  .seg-tab { padding:9px 20px; border-radius:40px; border:1.5px solid var(--border); background:white; font-size:12.5px; font-weight:600; cursor:pointer; transition:all 0.18s ease; color:var(--ink); letter-spacing:-0.01em; }
+  .seg-tab.active,.seg-tab:hover { border-color:var(--ink); background:var(--ink); color:var(--paper); }
+  .seg-tab[data-seg="1"].active { background:var(--seg1); border-color:var(--seg1); }
+  .seg-tab[data-seg="2"].active { background:var(--seg2); border-color:var(--seg2); }
+  .seg-tab[data-seg="3"].active { background:var(--seg3); border-color:var(--seg3); }
+  .seg-tab[data-seg="4"].active { background:var(--seg4); border-color:var(--seg4); }
+  .segment-panel { display:none; }
+  .segment-panel.active { display:block; }
+
+  /* INNER TABS */
+  .inner-tabs {
+    display: flex;
+    gap: 0;
+    margin: 32px 0 24px;
+    background: var(--ink);
+    border-radius: 14px;
+    padding: 6px;
+    width: fit-content;
+    box-shadow: 0 4px 20px rgba(13,13,13,0.18);
+  }
+  .inner-tab {
+    padding: 11px 22px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    color: rgba(245,240,232,0.80);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    position: relative;
+  }
+  .inner-tab:hover { color: rgba(245,240,232,1); }
+  .inner-tab.active {
+    background: white;
+    color: var(--ink);
+    box-shadow: 0 2px 8px rgba(13,13,13,0.15);
+  }
+  .inner-tabs::before {
+    display: none;
+  }
+  .inner-panel { display:none; }
+  .inner-panel.active { display:block; }
+
+  /* SEG CARDS */
+  .seg-header { display:grid; gap:18px; margin-bottom:18px; }
+  .seg-header-3col { grid-template-columns:1fr 1fr 1fr; grid-template-rows:auto auto; }
+  .seg-card { background:white; border-radius:12px; padding:26px; border:1px solid var(--border); }
+  .seg-card.hero-card { grid-column:1; grid-row:1 / 3; display:flex; flex-direction:column; justify-content:space-between; color:var(--paper); }
+  .seg1 .seg-card.hero-card { background:var(--seg1); }
+  .seg2 .seg-card.hero-card { background:var(--seg2); }
+  .seg3 .seg-card.hero-card { background:var(--seg3); }
+  .seg4 .seg-card.hero-card { background:var(--seg4); }
+  .seg-name { font-size:21px; font-weight:800; line-height:1.15; margin-bottom:8px; letter-spacing:-0.025em; }
+  .seg-ages { font-size:12.5px; opacity:0.72; margin-bottom:20px; font-weight:500; }
+  .seg-desc { font-size:13.5px; line-height:1.65; opacity:0.88; }
+  .seg-hhi { font-size:30px; font-weight:800; margin-top:24px; letter-spacing:-0.03em; }
+  .seg-hhi-label { font-size:10.5px; opacity:0.58; letter-spacing:0.09em; text-transform:uppercase; font-weight:500; }
+  .seg-mini-title { font-size:10.5px; font-weight:700; margin-bottom:14px; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted); }
+  .trigger-list { list-style:none; }
+  .trigger-list li { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; line-height:1.45; }
+  .trigger-list li:last-child { border-bottom:none; }
+  .trigger-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-top:6px; }
+  .seg1 .trigger-dot { background:var(--seg1); }
+  .seg2 .trigger-dot { background:var(--seg2); }
+  .seg3 .trigger-dot { background:var(--seg3); }
+  .seg4 .trigger-dot { background:var(--seg4); }
+  .platform-bar-item { margin-bottom:12px; }
+  .platform-bar-label { display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:5px; }
+  .platform-bar-label span:last-child { font-weight:600; }
+  .platform-bar-track { height:7px; background:var(--cream); border-radius:4px; overflow:hidden; }
+  .platform-bar-fill { height:100%; border-radius:4px; }
+  .seg1 .platform-bar-fill { background:var(--seg1); }
+  .seg2 .platform-bar-fill { background:var(--seg2); }
+  .seg3 .platform-bar-fill { background:var(--seg3); }
+  .seg4 .platform-bar-fill { background:var(--seg4); }
+
+  /* HOOKS */
+  .hooks-grid { display:flex; flex-direction:column; gap:10px; }
+  .hook-card { background:var(--cream); border-radius:10px; padding:15px 18px; border-left:3px solid transparent; font-size:13.5px; line-height:1.6; }
+  .seg1 .hook-card { border-color:var(--seg1); }
+  .seg2 .hook-card { border-color:var(--seg2); }
+  .seg3 .hook-card { border-color:var(--seg3); }
+  .seg4 .hook-card { border-color:var(--seg4); }
+  .hook-number { font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
+
+  /* MICRO-INFLUENCER ARCHETYPES */
+  .micro-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:16px; }
+  .micro-card { background:white; border-radius:12px; border:1px solid var(--border); overflow:hidden; }
+  .micro-card-head { padding:18px 20px 14px; border-bottom:1px solid var(--border); }
+  .micro-card-num { font-size:10px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+  .micro-card-name { font-size:15px; font-weight:700; letter-spacing:-0.01em; margin-bottom:6px; }
+  .micro-card-meta { display:flex; gap:8px; flex-wrap:wrap; }
+  .micro-tag { font-size:10.5px; font-weight:600; padding:2px 9px; border-radius:20px; }
+  .tag-platform { background:rgba(13,13,13,0.07); color:var(--ink); }
+  .tag-range { background:rgba(232,81,10,0.10); color:var(--accent); }
+  .micro-card-body { padding:16px 20px; }
+  .micro-why { font-size:12.5px; color:var(--muted); line-height:1.6; margin-bottom:12px; }
+  .micro-brief-label { font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); margin-bottom:6px; }
+  .micro-brief { font-size:12.5px; line-height:1.65; color:var(--ink); background:var(--cream); border-radius:8px; padding:12px 14px; border-left:2px solid var(--accent); }
+  .micro-hook { font-size:12px; font-style:italic; color:var(--muted); margin-top:8px; }
+
+  /* ADJACENCY LOGIC */
+  .adjacency-box { background:var(--ink); color:var(--paper); border-radius:12px; padding:28px 32px; margin-bottom:24px; }
+  .adjacency-box .adj-title { font-size:14px; font-weight:700; color:var(--accent); margin-bottom:10px; letter-spacing:-0.01em; }
+  .adjacency-box p { font-size:13.5px; line-height:1.75; color:rgba(245,240,232,0.82); }
+
+  /* ARCHETYPE ROSTER (Macro reference — kept) */
+  .archetype-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px; }
+  .archetype-card { background:white; border-radius:11px; padding:20px; border:1px solid var(--border); }
+  .archetype-name { font-size:14px; font-weight:700; margin-bottom:8px; letter-spacing:-0.01em; }
+  .archetype-segs { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:12px; }
+  .seg-badge { font-size:10px; font-weight:700; padding:2px 9px; border-radius:20px; letter-spacing:0.04em; }
+  .badge-1 { background:rgba(124,58,237,0.10); color:var(--seg1); }
+  .badge-2 { background:rgba(14,165,233,0.10); color:var(--seg2); }
+  .badge-3 { background:rgba(22,163,74,0.10); color:var(--seg3); }
+  .badge-4 { background:rgba(232,81,10,0.10); color:var(--seg4); }
+  .archetype-creators { font-size:12.5px; color:var(--muted); line-height:1.6; }
+  .archetype-platform { margin-top:10px; font-size:11.5px; font-weight:600; padding:4px 11px; background:var(--cream); border-radius:6px; display:inline-block; }
+
+  /* BUDGET */
+  .budget-visual { display:grid; grid-template-columns:1fr 1fr; gap:28px; align-items:center; }
+  .budget-bar-row { display:flex; align-items:center; gap:16px; margin-bottom:16px; }
+  .budget-bar-label { width:180px; font-size:13px; flex-shrink:0; line-height:1.35; }
+  .budget-bar-label strong { font-weight:700; }
+  .budget-bar-outer { flex:1; height:34px; background:var(--cream); border-radius:6px; overflow:hidden; }
+  .budget-bar-inner { height:100%; border-radius:6px; display:flex; align-items:center; padding-left:14px; font-size:14px; font-weight:800; color:white; letter-spacing:-0.02em; }
+  .bb-seg4 { background:var(--seg4); }
+  .bb-seg3 { background:var(--seg3); }
+  .bb-seg2 { background:var(--seg2); }
+  .bb-seg1 { background:var(--seg1); }
+
+  /* PLATFORM ALLOCATION TABLE */
+  .alloc-table { width:100%; border-collapse:collapse; margin-top:24px; }
+  .alloc-table th { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); padding:10px 14px; text-align:left; border-bottom:2px solid var(--border); }
+  .alloc-table td { font-size:13px; padding:11px 14px; border-bottom:1px solid var(--border); }
+  .alloc-table tr:last-child td { border-bottom:none; }
+  .alloc-table tr:hover td { background:var(--cream); }
+  .alloc-pct { font-weight:700; font-size:14px; }
+  .alloc-bar { height:6px; border-radius:3px; margin-top:4px; }
+
+  /* 3-RING */
+  .rings-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .ring-card { background:white; border-radius:12px; padding:28px; border:1px solid var(--border); position:relative; overflow:hidden; }
+  .ring-number { font-size:68px; font-weight:900; opacity:0.05; position:absolute; top:-10px; right:10px; line-height:1; letter-spacing:-0.04em; }
+  .ring-label { font-size:10px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+  .ring-title { font-size:18px; font-weight:700; margin-bottom:12px; letter-spacing:-0.02em; }
+  .ring-desc { font-size:13px; line-height:1.65; color:var(--muted); margin-bottom:16px; }
+  .ring-example { font-size:13px; padding:6px 0; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; gap:8px; }
+  .ring-example:last-child { border-bottom:none; }
+  .ring-dot { color:var(--accent); font-size:14px; flex-shrink:0; line-height:1.4; font-weight:700; }
+
+  /* ANTI-PATTERNS */
+  .anti-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .anti-card { background:#fff5f5; border:1px solid rgba(220,38,38,0.18); border-radius:11px; padding:20px; }
+  .anti-title { font-size:14px; font-weight:700; color:#dc2626; margin-bottom:8px; letter-spacing:-0.01em; }
+  .anti-desc { font-size:13px; line-height:1.65; color:#7f1d1d; }
+
+  /* SEASONAL */
+  .calendar-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+  .cal-card { background:white; border-radius:12px; padding:22px; border:1px solid var(--border); }
+  .cal-season { font-size:15px; font-weight:700; margin-bottom:6px; letter-spacing:-0.01em; }
+  .cal-months { font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:14px; font-weight:600; }
+  .cal-items { font-size:12.5px; line-height:1.7; color:var(--muted); }
+
+  /* METRICS */
+  .metrics-trio { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .metric-card { background:var(--ink); color:var(--paper); border-radius:12px; padding:32px 26px; position:relative; overflow:hidden; }
+  .metric-card::before { content:attr(data-n); font-size:110px; font-weight:900; position:absolute; top:-20px; right:-8px; opacity:0.06; line-height:1; letter-spacing:-0.04em; }
+  .metric-icon { font-size:26px; margin-bottom:14px; }
+  .metric-title { font-size:16px; font-weight:700; margin-bottom:10px; letter-spacing:-0.015em; }
+  .metric-desc { font-size:13px; color:rgba(245,240,232,0.65); line-height:1.65; }
+
+  /* RED FLAGS */
+  .flags-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .flag-card { background:#fff5f5; border:1px solid rgba(220,38,38,0.18); border-radius:11px; padding:20px; }
+  .flag-title { font-size:14px; font-weight:700; color:#dc2626; margin-bottom:8px; letter-spacing:-0.01em; }
+  .flag-desc { font-size:13px; line-height:1.65; color:#7f1d1d; }
+
+  /* ICP */
+  .icp-grid { display:grid; grid-template-columns:1fr 2fr; gap:24px; align-items:start; }
+  .icp-stat-block { background:var(--ink); color:var(--paper); border-radius:14px; padding:34px 30px; }
+  .icp-stat-title { font-size:10.5px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); margin-bottom:26px; }
+  .icp-stat-row { display:flex; justify-content:space-between; align-items:baseline; padding:11px 0; border-bottom:1px solid rgba(245,240,232,0.09); }
+  .icp-stat-row:last-child { border-bottom:none; }
+  .icp-stat-key { font-size:12.5px; color:rgba(245,240,232,0.58); }
+  .icp-stat-val { font-size:20px; font-weight:800; color:var(--paper); letter-spacing:-0.025em; }
+  .icp-insights { display:flex; flex-direction:column; gap:14px; }
+  .icp-insight { background:white; border-radius:11px; padding:18px 22px; border:1px solid var(--border); display:flex; gap:15px; align-items:flex-start; }
+  .icp-insight-icon { font-size:20px; flex-shrink:0; }
+  .icp-insight-title { font-size:13.5px; font-weight:700; margin-bottom:4px; letter-spacing:-0.01em; }
+  .icp-insight-text { font-size:13px; color:var(--muted); line-height:1.6; }
+
+  /* TRUST */
+  .trust-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+  .trust-card { display:flex; gap:14px; align-items:flex-start; background:white; border-radius:11px; padding:18px; border:1px solid var(--border); }
+  .trust-icon { width:38px; height:38px; border-radius:9px; background:var(--cream); display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+  .trust-title { font-size:13.5px; font-weight:700; margin-bottom:4px; letter-spacing:-0.01em; }
+  .trust-text { font-size:12.5px; color:var(--muted); line-height:1.6; }
+
+  /* CONCLUSION */
+  .conclusion { background:var(--ink); color:var(--paper); padding:72px 0; }
+  .conclusion .section-title { color:var(--paper); max-width:800px; }
+  .conclusion-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-top:48px; }
+  .conclusion-card { border:1px solid rgba(245,240,232,0.12); border-radius:12px; padding:26px; }
+  .conclusion-card-num { font-size:44px; font-weight:900; color:var(--accent); margin-bottom:12px; letter-spacing:-0.04em; }
+  .conclusion-card-title { font-size:16px; font-weight:700; margin-bottom:10px; letter-spacing:-0.015em; }
+  .conclusion-card-text { font-size:13px; color:rgba(245,240,232,0.62); line-height:1.7; }
+
+  /* CALLOUT */
+  .callout { border-left:3px solid var(--accent); background:rgba(232,81,10,0.055); border-radius:0 10px 10px 0; padding:16px 20px; margin:24px 0; font-size:14.5px; line-height:1.7; }
+  .callout strong { color:var(--accent); font-weight:700; }
+
+  /* FOOTER */
+  footer { background:var(--ink); border-top:1px solid rgba(245,240,232,0.09); padding:26px 48px; display:flex; justify-content:space-between; align-items:center; }
+  footer span { font-size:11px; color:rgba(245,240,232,0.30); }
+
+  /* ── TABLET (max 1024px) ── */
+  @media (max-width:1024px) {
+    .container { padding:0 32px; }
+    .platform-grid { grid-template-columns:repeat(2,1fr); }
+    .micro-grid { grid-template-columns:repeat(2,1fr); }
+    .archetype-grid { grid-template-columns:repeat(2,1fr); }
+    .rings-grid { grid-template-columns:repeat(2,1fr); }
+    .conclusion-grid { grid-template-columns:repeat(2,1fr); }
+    .anti-grid { grid-template-columns:repeat(2,1fr); }
+    .tier-grid { grid-template-columns:repeat(2,1fr); }
+    .strategy-shift { grid-template-columns:repeat(2,1fr); }
+    .icp-grid { grid-template-columns:1fr 1.5fr; }
+  }
+
+  /* ── SMALL TABLET (max 900px) ── */
+  @media (max-width:900px) {
+    .container { padding:0 24px; }
+    .section { padding:52px 0; }
+    .hero { padding:52px 28px 48px; }
+    .hero h1 { font-size:clamp(34px,7vw,56px); }
+    .hero-sub { font-size:15px; }
+    .hero-stats { gap:28px; }
+    .hero-stat-num { font-size:28px; }
+
+    .section-title { font-size:clamp(22px,4vw,32px); margin-bottom:32px; }
+
+    /* all multi-col grids → 1 col */
+    .charts-row,
+    .seg-header,
+    .seg-header-3col,
+    .rings-grid,
+    .calendar-grid,
+    .metrics-trio,
+    .icp-grid,
+    .conclusion-grid,
+    .budget-visual,
+    .flags-grid,
+    .trust-grid,
+    .tier-grid,
+    .anti-grid,
+    .strategy-shift,
+    .micro-grid,
+    .archetype-grid { grid-template-columns:1fr !important; }
+
+    .seg-card.hero-card { grid-column:auto !important; grid-row:auto !important; }
+    .platform-grid { grid-template-columns:1fr; }
+    .chart-full { grid-column:auto !important; }
+
+    /* chart heights reduced */
+    .chart-canvas-wrap { height:200px; }
+    .chart-box { padding:20px; }
+
+    /* inner tabs: scroll horizontally */
+    .inner-tabs {
+      width:100%;
+      overflow-x:auto;
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:none;
+      flex-wrap:nowrap;
+      border-radius:12px;
+    }
+    .inner-tabs::-webkit-scrollbar { display:none; }
+    .inner-tab { padding:10px 16px; font-size:12px; flex-shrink:0; }
+
+    /* segment nav: wrap */
+    .segments-nav { gap:6px; }
+    .seg-tab { padding:8px 14px; font-size:11.5px; }
+
+    /* budget bar label smaller */
+    .budget-bar-label { width:130px; font-size:12px; }
+    .budget-bar-inner { font-size:12px; padding-left:10px; }
+
+    /* allocation table: horizontal scroll */
+    .alloc-table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    .alloc-table { min-width:560px; }
+
+    /* hero stats: 2-col wrap */
+    .hero-stats { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+
+    /* footer: stack */
+    footer { flex-direction:column; gap:10px; text-align:center; padding:24px; }
+
+    /* conclusion */
+    .conclusion { padding:52px 0; }
+
+    /* callout */
+    .callout { font-size:13.5px; }
+
+    /* tier card */
+    .tier-grid { grid-template-columns:1fr; }
+  }
+
+  /* ── MOBILE (max 640px) ── */
+  @media (max-width:640px) {
+    .container { padding:0 18px; }
+    .section { padding:40px 0; }
+
+    .hero { padding:40px 18px 40px; }
+    .hero h1 { font-size:clamp(30px,8vw,42px); letter-spacing:-0.025em; }
+    .hero-sub { font-size:14px; margin-bottom:32px; }
+    .hero-eyebrow { font-size:10px; }
+    .hero-stats { grid-template-columns:1fr 1fr; gap:16px; }
+    .hero-stat-num { font-size:24px; }
+    .hero-stat-label { font-size:10px; }
+
+    .section-title { font-size:clamp(20px,5.5vw,28px); margin-bottom:24px; }
+    .section-label { font-size:10px; }
+    .bluf-box { padding:28px 22px; }
+    .bluf-box p { font-size:14px; }
+
+    /* force all grids single col */
+    .seg-header, .seg-header-3col { grid-template-columns:1fr !important; }
+    .seg-card.hero-card { grid-column:auto !important; grid-row:auto !important; }
+
+    /* strategy shift: single col */
+    .strategy-shift { grid-template-columns:1fr; gap:18px; }
+    .shift-num { font-size:28px; }
+
+    /* tier cards */
+    .tier-grid { grid-template-columns:1fr; }
+
+    /* segments nav: full-width wrapping */
+    .segments-nav { flex-direction:column; gap:6px; }
+    .seg-tab { text-align:left; border-radius:10px; padding:10px 16px; font-size:12px; }
+
+    /* inner tabs */
+    .inner-tabs { width:100%; border-radius:10px; padding:4px; }
+    .inner-tab { padding:9px 13px; font-size:11px; }
+
+    /* seg cards */
+    .seg-card { padding:18px; }
+    .seg-name { font-size:18px; }
+    .seg-hhi { font-size:24px; }
+
+    /* platform cards */
+    .platform-grid { grid-template-columns:1fr; gap:12px; }
+    .platform-card { padding:20px; }
+    .platform-reach { font-size:24px; }
+
+    /* charts: single col, shorter, contained */
+    .charts-row { grid-template-columns:1fr !important; gap:12px; }
+    .chart-full { grid-column:auto !important; }
+    .chart-canvas-wrap { height:180px; }
+    .chart-box { padding:16px; overflow:hidden; }
+    .chart-title { font-size:12.5px; margin-bottom:14px; }
+
+    /* micro cards */
+    .micro-grid { grid-template-columns:1fr; gap:12px; }
+    .micro-card-head { padding:14px 16px 12px; }
+    .micro-card-body { padding:14px 16px; }
+
+    /* adjacency box */
+    .adjacency-box { padding:20px 20px; }
+
+    /* icp */
+    .icp-grid { grid-template-columns:1fr !important; }
+    .icp-stat-block { padding:24px 20px; }
+    .icp-stat-val { font-size:17px; }
+    .icp-insight { padding:14px 16px; }
+
+    /* hooks */
+    .hook-card { padding:12px 14px; font-size:12.5px; }
+
+    /* budget */
+    .budget-visual { grid-template-columns:1fr; gap:20px; }
+    .budget-bar-row { flex-direction:column; align-items:flex-start; gap:8px; }
+    .budget-bar-label { width:100%; font-size:12px; }
+    .budget-bar-outer { width:100%; height:30px; }
+    .budget-bar-inner { font-size:12px; }
+
+    /* allocation table scroll */
+    .alloc-table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; margin:0 -18px; padding:0 18px; }
+    .alloc-table { min-width:520px; }
+    .alloc-table th, .alloc-table td { padding:8px 10px; font-size:11.5px; }
+
+    /* rings */
+    .rings-grid { grid-template-columns:1fr; gap:12px; }
+    .ring-card { padding:20px; }
+    .ring-title { font-size:16px; }
+
+    /* anti */
+    .anti-grid { grid-template-columns:1fr; gap:12px; }
+
+    /* calendar */
+    .calendar-grid { grid-template-columns:1fr 1fr; gap:10px; }
+    .cal-card { padding:16px; }
+    .cal-season { font-size:14px; }
+    .cal-items { font-size:11.5px; }
+
+    /* metrics */
+    .metrics-trio { grid-template-columns:1fr; gap:12px; }
+    .metric-card { padding:24px 20px; }
+    .metric-title { font-size:15px; }
+
+    /* trust + flags */
+    .trust-grid { grid-template-columns:1fr; gap:10px; }
+    .trust-card { padding:14px; }
+    .flags-grid { grid-template-columns:1fr; gap:10px; }
+    .flag-card { padding:16px; }
+
+    /* conclusion */
+    .conclusion { padding:40px 0; }
+    .conclusion-grid { grid-template-columns:1fr; gap:12px; }
+    .conclusion-card { padding:20px; }
+    .conclusion-card-num { font-size:36px; }
+    .conclusion-card-title { font-size:15px; }
+
+    /* footer */
+    footer { flex-direction:column; gap:8px; text-align:center; padding:20px 18px; }
+
+    /* callout */
+    .callout { font-size:13px; padding:14px 16px; }
+  }
+
+  /* ── VERY SMALL MOBILE (max 375px) ── */
+  @media (max-width:375px) {
+    .container { padding:0 14px; }
+    .hero { padding:32px 14px; }
+    .hero h1 { font-size:28px; }
+    .hero-stats { grid-template-columns:1fr 1fr; gap:12px; }
+    .hero-stat-num { font-size:20px; }
+    .section-title { font-size:20px; }
+    .inner-tab { padding:8px 11px; font-size:10.5px; }
+    .calendar-grid { grid-template-columns:1fr; }
+    .segments-nav { flex-direction:column; }
+    .alloc-table { min-width:440px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <p class="hero-eyebrow">FlightPoints — Influencer Strategy Playbook 2025</p>
+    <h1>Four Audiences.<br>One <em>Optimizer</em> Mindset.</h1>
+    <p class="hero-sub">A micro-influencer-first strategy targeting $215K-HHI award travel optimizers across four life-stage segments — built on lifestyle-adjacent creator categories, gifted partnerships, and $0–$200 per activation.</p>
+    <div class="hero-stats">
+      <div class="hero-stat-item"><div class="hero-stat-num">4</div><div class="hero-stat-label">Audience Segments</div></div>
+      <div class="hero-stat-item"><div class="hero-stat-num">100–150</div><div class="hero-stat-label">Activations / Quarter</div></div>
+      <div class="hero-stat-item"><div class="hero-stat-num">$0–$200</div><div class="hero-stat-label">Cost Per Creator</div></div>
+      <div class="hero-stat-item"><div class="hero-stat-num">28+</div><div class="hero-stat-label">Micro Archetypes</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- BLUF -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">Bottom Line Up Front</p>
+    <div class="bluf-box">
+      <p><strong>We are not chasing travel creators.</strong> The winning strategy is to embed FlightPoints inside the content that our four audience segments already trust — FinTok salary-transparency creators for 21–28s, productivity YouTubers and DINK-couple podcasters for 28–37s, mom-CEO and Disney-family creators for 35–45s, and FIRE bloggers and physician-finance newsletters for 42–50s. <strong>100–150 simultaneous activations per quarter at $0–$200 each</strong> beats 5 macro travel-hacker deals at $5,000 each — because trust density in lifestyle-adjacent communities outperforms the diluted attention of a saturated travel-hacker audience. The tool that gets people to pay $99.99 is the creator whose content they already consume every single day.</p>
+    </div>
+
+    <div style="margin-top:28px;">
+      <div class="strategy-shift">
+        <div class="shift-item">
+          <div class="shift-num">$0–200</div>
+          <div class="shift-label">Per Activation Ceiling</div>
+          <div class="shift-desc">Cash flat fee + FlightPoints Pro annual subscription ($99.99 value) as in-kind trade. No macro deals. No $5K YouTube sponsors. Scale through volume and trust-density.</div>
+        </div>
+        <div class="shift-item">
+          <div class="shift-num">10K–100K</div>
+          <div class="shift-label">Target Follower Range</div>
+          <div class="shift-desc">Micro-influencers in this range average 3–8% ER on TikTok/IG and 5.2% on YouTube — significantly outperforming macro accounts. Gifted campaigns generate +12.9% engagement vs. paid.</div>
+        </div>
+        <div class="shift-item">
+          <div class="shift-num">+81%</div>
+          <div class="shift-label">Views From Niche-Match</div>
+          <div class="shift-desc">Niche-aligned campaigns deliver +13.59% engagement and +81.39% more views vs. off-niche. Only 37% of brands exploit this. The lifestyle-adjacency framework is the arbitrage.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTRACTING MODEL -->
+<section class="section" style="background:var(--cream);">
+  <div class="container">
+    <p class="section-label">Partnership Model</p>
+    <h2 class="section-title">Three-Tier Contracting Structure</h2>
+    <div class="tier-grid">
+      <div class="tier-card tier-a">
+        <div class="tier-label">Tier A · Gifted Only</div>
+        <div class="tier-name">Trade Partnership</div>
+        <div class="tier-range">10K–25K followers · $0 cash</div>
+        <ul class="tier-items">
+          <li><span class="tier-dot"></span>FlightPoints Pro annual free ($99.99 value)</li>
+          <li><span class="tier-dot"></span>Custom UTM affiliate link</li>
+          <li><span class="tier-dot"></span>30% recurring revenue share for 12 months</li>
+          <li><span class="tier-dot"></span>Personal promo code (e.g., MAYAFLIES)</li>
+          <li><span class="tier-dot"></span>Best for: FinTok, DITL, lifestyle nano creators</li>
+        </ul>
+      </div>
+      <div class="tier-card tier-b">
+        <div class="tier-label">Tier B · Gift + Flat</div>
+        <div class="tier-name">Paid Micro Deal</div>
+        <div class="tier-range">25K–60K followers · $100–150 cash</div>
+        <ul class="tier-items">
+          <li><span class="tier-dot"></span>All Tier A benefits included</li>
+          <li><span class="tier-dot"></span>$100–150 flat fee per post/Reel/TikTok</li>
+          <li><span class="tier-dot"></span>One Story sequence or pin comment required</li>
+          <li><span class="tier-dot"></span>Best for: mid-tier family, DINK, productivity creators</li>
+        </ul>
+      </div>
+      <div class="tier-card tier-c">
+        <div class="tier-label">Tier C · Gift + Flat + Bonus</div>
+        <div class="tier-name">Performance Deal</div>
+        <div class="tier-range">60K–100K followers · $200 flat + bonus</div>
+        <ul class="tier-items">
+          <li><span class="tier-dot"></span>All Tier B benefits included</li>
+          <li><span class="tier-dot"></span>$200 flat fee per post</li>
+          <li><span class="tier-dot"></span>$25 bonus per qualified Pro trial, capped</li>
+          <li><span class="tier-dot"></span>Best for: newsletter authors, podcast hosts, high-LTV Seg 4 creators</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:24px;">
+      <strong>Disclosure requirement (non-negotiable):</strong> US (FTC), UK (ASA), and Australia (ACMA/AANA) all require disclosure of in-kind trade as a material connection. All briefs must specify #ad or #FlightPointsPartner in caption and verbal disclosure in the first 3 seconds of any video. This is especially scrutinized on FinTok-adjacent content.
+    </div>
+  </div>
+</section>
+
+<!-- ICP -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">Ideal Customer Profile</p>
+    <h2 class="section-title">Who We're Marketing To</h2>
+    <div class="icp-grid">
+      <div class="icp-stat-block">
+        <p class="icp-stat-title">Core ICP Data (10xTravel Survey)</p>
+        <div class="icp-stat-row"><span class="icp-stat-key">Median age</span><span class="icp-stat-val">49 yrs</span></div>
+        <div class="icp-stat-row"><span class="icp-stat-key">Household income</span><span class="icp-stat-val">$215K</span></div>
+        <div class="icp-stat-row"><span class="icp-stat-key">Credit cards held</span><span class="icp-stat-val">11 cards</span></div>
+        <div class="icp-stat-row"><span class="icp-stat-key">Monthly card spend</span><span class="icp-stat-val">$8,700</span></div>
+        <div class="icp-stat-row"><span class="icp-stat-key">New cards/year</span><span class="icp-stat-val">4/yr</span></div>
+        <div class="icp-stat-row"><span class="icp-stat-key">Married</span><span class="icp-stat-val">76%</span></div>
+        <div class="icp-stat-row"><span class="icp-stat-key">Have children</span><span class="icp-stat-val">73%</span></div>
+        <div class="icp-stat-row"><span class="icp-stat-key">Have "Player 2" partner</span><span class="icp-stat-val">77%</span></div>
+      </div>
+      <div class="icp-insights">
+        <div class="icp-insight">
+          <div class="icp-insight-icon">🧠</div>
+          <div>
+            <div class="icp-insight-title">"Planner Personality" — Detail-Oriented Optimizers</div>
+            <div class="icp-insight-text">This audience treats points optimization as an intellectual hobby, not frugality. They derive satisfaction from optimizing complex systems — the same psychology as chess or fantasy sports. They are prone to "analysis paralysis" and deeply value tools that eliminate cognitive overhead.</div>
+          </div>
+        </div>
+        <div class="icp-insight">
+          <div class="icp-insight-icon">⏱️</div>
+          <div>
+            <div class="icp-insight-title">Time Savings Over Cost Savings</div>
+            <div class="icp-insight-text">At $215K HHI, saving $500 is less motivating than saving 6 hours of research. The FlightPoints message must lead with time savings — stop hunting across 10+ airline websites — not cost savings. Billable rates of $300–$1,500/hr make the math obvious for this audience.</div>
+          </div>
+        </div>
+        <div class="icp-insight">
+          <div class="icp-insight-icon">👨‍👩‍👧‍👦</div>
+          <div>
+            <div class="icp-insight-title">Family Travel Is the Primary High-Stakes Use Case</div>
+            <div class="icp-insight-text">73% have children. Finding 4 saver business-class seats together to Tokyo or Paris is the canonical pain point. Family travel content — spring break, multi-gen trips, kids' first international business class — drives the highest conversion intent.</div>
+          </div>
+        </div>
+        <div class="icp-insight">
+          <div class="icp-insight-icon">🔍</div>
+          <div>
+            <div class="icp-insight-title">Validates Every Tool on Reddit Before Paying</div>
+            <div class="icp-insight-text">They will Google "FlightPoints reddit" before subscribing. 31% discover tools via Facebook Groups; Reddit r/awardtravel (49K members) and r/churning (163K members) are the trust chambers. A strategy without native community presence will fail to convert the bullseye segment regardless of creator spend.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORMS -->
+<section class="section" style="background:var(--cream);">
+  <div class="container">
+    <p class="section-label">Platform Intelligence</p>
+    <h2 class="section-title">Where the Audience Actually Lives</h2>
+    <div class="platform-grid">
+      <div class="platform-card yt">
+        <div class="platform-icon">▶️</div>
+        <div class="platform-name">YouTube</div>
+        <div class="platform-reach">89%</div>
+        <div class="platform-reach-label">$100K+ HHI adoption rate</div>
+        <div class="platform-details">
+          <div class="platform-detail-row"><span class="platform-detail-key">30–49 reach</span><span class="platform-detail-val">92%</span></div>
+          <div class="platform-detail-row"><span class="platform-detail-key">Avg session length</span><span class="platform-detail-val">7 min 25 sec</span></div>
+          <div class="platform-detail-row"><span class="platform-detail-key">Daily time spent</span><span class="platform-detail-val">35–49 min</span></div>
+          <div class="platform-detail-row"><span class="platform-detail-key">Micro ER (sub-100K)</span><span class="platform-detail-val">~5.2%</span></div>
+          <div class="platform-detail-row"><span class="platform-detail-key">Shorts daily views</span><span class="platform-detail-val">200B+</span></div>
+        </div>
+        <div class="platform-role">🎯 Long-form trust-building. The explainer engine for every segment. Now also the #1 podcast platform by time spent.</div>
+      </div>
+      <div class="platform-card fb">
+        <div class="platform-icon">👥</div>
+        <div class="platform-name">Facebook Groups</div>
+        <div class="platform-reach">80%</div>
+        <div class="platform-reach-label">US 30–49 yr adoption — highest of any platform</div>
+        <div class="platform-details">
+          <div class="platform-detail-row"><span class="platform-detail-key">$100K+ HHI use</span><span class="platform-detail-val">71%</span></div>
+          <div class="platform-detail-row"><span class="platform-detail-key">Daily active (of users)</span><span class="platform-detail-val">52%</span></div>
+          <div class="platform-detail-row"><span class="platform-detail-key">Award Travel 101 members</span><span class="platform-detail-val">110,000+</span></div>
+          <div class="platform-detail-row"><span class="platform-detail-key">Monthly Group users (global)</span><span class="platform-detail-val">1.8 billion</span></div>
+        </div>
+        <div class="platform-role">🎯 The secret weapon for 35–50 cohort. Award Travel 101 alone is the highest-density concentration of FlightPoints' exact ICP online.</div>
+      </div>
+      <div class="platform-card ig">
+        <div class="platform-icon">📸</div>
+        <div class="platform-name">Instagram</div>
+        <div class="platform-reach">60%</div>
+        <div class="platform-reach-label">$100K+ HHI adoption rate</div>
+        <div class="platform-details">
+          <div class="platform-detail-row"><span class="platform-detail-key">30–49 reach</span><span class="platform-detail-val">62%</span></div>
+          <div class="platform-detail-row"><span class="platform-detail-key">Reels reach rate</span><span class="platform-detail-val">30.81%</span></div>
+          <div class="platform-detail-row"><span class="platform-detail-key">Micro Reels ER</span><span class="platform-detail-val">~6.9%</span></div>
+          <div class="platform-detail-row"><span class="platform-detail-key">Women over-index</span><span class="platform-detail-val">55% vs 44%</span></div>
+        </div>
+        <div class="platform-role">🎯 Aspirational fuel, not conversion engine. Reels for awareness, carousels (save-worthy) for consideration, Stories for takeovers.</div>
+      </div>
+      <div class="platform-card tt">
+        <div class="platform-icon">🎵</div>
+        <div class="platform-name">TikTok</div>
+        <div class="platform-reach">30%</div>
+        <div class="platform-reach-label">$100K+ HHI — significantly under-indexes</div>
+        <div class="platform-details">
+          <div class="platform-detail-row"><span class="platform-detail-key">30–49 reach</span><span class="platform-detail-val">44%</span></div>
+          <div class="platform-detail-row"><span class="platform-detail-key">Micro ER (sub-100K)</span><span class="platform-detail-val">~7.5%</span></div>
+          <div class="platform-detail-row"><span class="platform-detail-key">Travel engagement rate</span><span class="platform-detail-val">3.21%</span></div>
+          <div class="platform-detail-row"><span class="platform-detail-key">% of views from FYP</span><span class="platform-detail-val">96%</span></div>
+        </div>
+        <div class="platform-role">⚠️ Discovery layer only for 21–37 segments. Highest micro ER of any platform — great for reach but cannot close a $99.99 SaaS purchase alone.</div>
+      </div>
+      <div class="platform-card rd">
+        <div class="platform-icon">🔴</div>
+        <div class="platform-name">Reddit</div>
+        <div class="platform-reach">37%</div>
+        <div class="platform-reach-label">$100K+ HHI — the strongest income skew online</div>
+        <div class="platform-details">
+          <div class="platform-detail-row"><span class="platform-detail-key">$100K+ vs sub-$30K</span><span class="platform-detail-val">37% vs 17%</span></div>
+          <div class="platform-detail-row"><span class="platform-detail-key">r/awardtravel members</span><span class="platform-detail-val">~500K</span></div>
+          <div class="platform-detail-row"><span class="platform-detail-key">r/churning members</span><span class="platform-detail-val">163K</span></div>
+          <div class="platform-detail-row"><span class="platform-detail-key">Trust for product research</span><span class="platform-detail-val">#4 (78%)</span></div>
+        </div>
+        <div class="platform-role">🎯 The validation chamber. Non-optional — they WILL Google "FlightPoints reddit" before paying $99.99.</div>
+      </div>
+      <div class="platform-card pd">
+        <div class="platform-icon">🎙️</div>
+        <div class="platform-name">Podcasts / Newsletters</div>
+        <div class="platform-reach">61%</div>
+        <div class="platform-reach-label">US 35–54 monthly listeners</div>
+        <div class="platform-details">
+          <div class="platform-detail-row"><span class="platform-detail-key">$75K+ listeners</span><span class="platform-detail-val">47%</span></div>
+          <div class="platform-detail-row"><span class="platform-detail-key">Made purchase from ad</span><span class="platform-detail-val">62%</span></div>
+          <div class="platform-detail-row"><span class="platform-detail-key">Newsletter CTR (finance niche)</span><span class="platform-detail-val">4–8%</span></div>
+          <div class="platform-detail-row"><span class="platform-detail-key">Newsletter open (finance)</span><span class="platform-detail-val">40–55%</span></div>
+        </div>
+        <div class="platform-role">🎯 Highest-trust paid channel. Host-read sponsorships on 5K–50K subscriber newsletters outperform every volume of TikTok creator deals for Segments 2 and 4.</div>
+      </div>
+    </div>
+    <div class="charts-row">
+      <div class="chart-box">
+        <div class="chart-title">Platform Adoption by Age Band (30–49 ICP)</div>
+        <div class="chart-canvas-wrap"><canvas id="platformAdoptionChart"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">$100K+ HHI Adoption by Platform</div>
+        <div class="chart-canvas-wrap"><canvas id="incomeAdoptionChart"></canvas></div>
+      </div>
+    </div>
+    <div class="charts-row">
+      <div class="chart-box chart-full">
+        <div class="chart-title">Strategic Role by Platform — Funnel Position</div>
+        <div class="chart-canvas-wrap" style="height:200px"><canvas id="funnelChart"></canvas></div>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>Key insight:</strong> Facebook is written off as "old" by most marketers — but 80% of US 30–49 year-olds use it, the highest of any platform in that age band. For FlightPoints, Facebook Groups are not a secondary channel. They are the highest-density concentration of our exact ICP online.
+    </div>
+  </div>
+</section>
+
+<!-- SEGMENTS -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">Audience Segmentation</p>
+    <h2 class="section-title">Four Segments — Profiles, Micro-Influencer Archetypes & Content Briefs</h2>
+    <div class="segments-nav">
+      <button class="seg-tab active" data-seg="1" onclick="showSeg(1)">① Aspiring Optimizer · 21–28</button>
+      <button class="seg-tab" data-seg="2" onclick="showSeg(2)">② Climbing Optimizer · 28–37</button>
+      <button class="seg-tab" data-seg="3" onclick="showSeg(3)">③ Family Optimizer · 35–45</button>
+      <button class="seg-tab" data-seg="4" onclick="showSeg(4)">④ Veteran Hobbyist · 42–50</button>
+    </div>
+
+    <!-- SEG 1 -->
+    <div class="segment-panel seg1 active" id="seg-1">
+      <div class="inner-tabs">
+        <button class="inner-tab active" onclick="showInner(1,'overview')">Segment Overview</button>
+        <button class="inner-tab" onclick="showInner(1,'archetypes')">Micro-Influencer Archetypes</button>
+        <button class="inner-tab" onclick="showInner(1,'hooks')">Content Hooks</button>
+      </div>
+      <div class="inner-panel active" id="seg1-overview">
+        <div class="seg-header seg-header-3col">
+          <div class="seg-card hero-card">
+            <div>
+              <div class="seg-name">The Aspiring<br>Optimizer</div>
+              <div class="seg-ages">Ages 21–28 · Future ICP</div>
+              <div class="seg-desc">The 23-year-old Bain analyst opening her first Sapphire Preferred. The 22-year-old Wharton international student flying home to Mumbai twice a year. The 26-year-old Microsoft engineer planning a Bali honeymoon. Not yet 11-card power users — but on the trajectory.</div>
+            </div>
+            <div>
+              <div class="seg-hhi">$0–$300K</div>
+              <div class="seg-hhi-label">HHI Range (wide — grad to senior SWE)</div>
+            </div>
+          </div>
+          <div class="seg-card">
+            <div class="seg-mini-title">Platform Priority</div>
+            <div class="platform-bar-list">
+              <div class="platform-bar-item"><div class="platform-bar-label"><span>TikTok</span><span>Primary · 7.5% micro ER</span></div><div class="platform-bar-track"><div class="platform-bar-fill" style="width:95%"></div></div></div>
+              <div class="platform-bar-item"><div class="platform-bar-label"><span>Instagram Reels</span><span>Primary</span></div><div class="platform-bar-track"><div class="platform-bar-fill" style="width:90%"></div></div></div>
+              <div class="platform-bar-item"><div class="platform-bar-label"><span>Reddit</span><span>Validation</span></div><div class="platform-bar-track"><div class="platform-bar-fill" style="width:72%"></div></div></div>
+              <div class="platform-bar-item"><div class="platform-bar-label"><span>YouTube</span><span>Deep-dives</span></div><div class="platform-bar-track"><div class="platform-bar-fill" style="width:60%"></div></div></div>
+              <div class="platform-bar-item"><div class="platform-bar-label"><span>Podcasts</span><span>Commute</span></div><div class="platform-bar-track"><div class="platform-bar-fill" style="width:45%"></div></div></div>
+            </div>
+          </div>
+          <div class="seg-card">
+            <div class="seg-mini-title">Emotional Triggers</div>
+            <ul class="trigger-list">
+              <li><span class="trigger-dot"></span>FOMO & social status (passport stamps, lounge selfies, metal Amex weight)</li>
+              <li><span class="trigger-dot"></span>Career anxiety — 52–59% worry AI affects their careers (Deloitte 2025)</li>
+              <li><span class="trigger-dot"></span>The "min-max" optimization thrill — same psychology as gaming</li>
+              <li><span class="trigger-dot"></span>HENRY identity — "High Earner Not Rich Yet"</li>
+              <li><span class="trigger-dot"></span>Honeymoon urgency — avg $15–30K, mostly points-funded</li>
+              <li><span class="trigger-dot"></span>International student homesickness — paid flights home</li>
+            </ul>
+          </div>
+          <div class="seg-card">
+            <div class="seg-mini-title">Influencer Archetypes They Trust</div>
+            <ul class="trigger-list">
+              <li><span class="trigger-dot"></span><strong>Lawyer-Authority Finfluencer</strong> — Erika Kullberg (21M+), Vivian Tu/Your Rich BFF (8M+)</li>
+              <li><span class="trigger-dot"></span><strong>Approachable Educator</strong> — Humphrey Yang (3.4M TikTok), Mark Tilbury (7.9M)</li>
+              <li><span class="trigger-dot"></span><strong>Money-Mindset Creator</strong> — Money with Katie, Tori Dunlap/Her First $100K</li>
+              <li><span class="trigger-dot"></span><strong>Young Travel Hacker</strong> — Karlie Place, Pennywisetraveler, Monkey Miles</li>
+            </ul>
+          </div>
+          <div class="seg-card">
+            <div class="seg-mini-title">Key Life Milestones (Triggers)</div>
+            <ul class="trigger-list">
+              <li><span class="trigger-dot"></span>First "real" job — first card application</li>
+              <li><span class="trigger-dot"></span>Learning the 5/24 rule for the first time</li>
+              <li><span class="trigger-dot"></span>Engagement / honeymoon planning</li>
+              <li><span class="trigger-dot"></span>First international trip on own dime</li>
+              <li><span class="trigger-dot"></span>78% of millennials applied for rewards card in past 2 years</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="inner-panel" id="seg1-archetypes">
+        <div class="adjacency-box">
+          <div class="adj-title">Lifestyle Adjacency Logic — Why Non-Travel Creators Convert This Segment</div>
+          <p>The Aspiring Optimizer does not respond to travel-hacker creators because that audience already has deeply entrenched free YouTube content. They convert when a creator they already trust as a relatable peer mentions FlightPoints inside a non-travel lifestyle context. The hook is "min-max" — the same psychological lever that drives gaming, gym programming, and personal finance. A 24-year-old in NYC who watches salary-transparency TikToks does not need a new travel creator — they need their existing trusted creator to mention that the $5,400/month they watch them swipe is already generating enough points for a business-class honeymoon.</p>
+        </div>
+        <div class="micro-grid">
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 01</div>
+              <div class="micro-card-name">FinTok / Salary-Transparency Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">TikTok + IG</span>
+                <span class="micro-tag tag-range">10K–80K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">49% of Gen Z names TikTok as their #1 source of financial info. "Day in my life as a 23-year-old investment banker" creators show paychecks, rents, Equinox memberships, and Resy nights out. Their audiences are exactly the HENRY cohort who swipe the most but don't know award redemption exists. Archetype examples: @notbadjuju (NYC IB analyst), salary-transparency finance creators in the 15K–80K range.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">Continue your normal "payday routine" or DITL format exactly. At the 30-second mark, drop: <em>"I put all this on my Chase Sapphire and ran it through FlightPoints."</em> End with a 3-second screen recording of a business-class award seat appearing. The hook: <strong>"Here's how my $X/month NYC spending becomes one round-trip business-class flight to Tokyo."</strong> The viewer is not being asked to learn travel hacking — they're being told their existing spending already qualifies them.</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 02</div>
+              <div class="micro-card-name">"HENRY" Personal-Finance Educator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">TikTok + IG + YouTube</span>
+                <span class="micro-tag tag-range">15K–100K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">The micro-tier imitators of Erika Kullberg, Vivian Tu, and Tori Dunlap — creators like Mady Mills, Boujie Budgeter, Rachel Talks Money, Eyebvee, Karly Ombom — sit in the 15K–100K range with concentrated US/UK 22–32 audiences hungry for "things they don't teach you after college."</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">Frame FlightPoints as the missing tool in their "things every high-earner should know" series. Hook: <strong>"Your Amex Platinum's 80K welcome bonus, run through FlightPoints, is a $9,000 business-class seat. Here's me booking one in 90 seconds."</strong> Treats FlightPoints as a financial-literacy unlock, not a travel product.</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 03</div>
+              <div class="micro-card-name">NYC/London/Sydney "Soft Life" Lifestyle Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">IG Reels + TikTok</span>
+                <span class="micro-tag tag-range">10K–60K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">These creators (the "$3,200 Murray Hill studio" or "Hackney warehouse tour" or "Surry Hills shoebox" subcategory) document the luxury-on-entry-salary lifestyle. Their audiences specifically watch to understand "how is she affording this." FlightPoints answers that question for the travel component.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">Lifestyle lookbook / "weekend in my life" format unchanged. Creator narrates their Saturday — matcha, Pilates, brunch, shopping, dinner reservation — and at the end shows booking their next trip via FlightPoints. Hook: <strong>"Same card I used for everything you just watched got me JFK to Paris in business for 60K points."</strong></div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 04</div>
+              <div class="micro-card-name">Diaspora / "Flying Home" Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">TikTok + Instagram</span>
+                <span class="micro-tag tag-range">10K–80K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">Filipino-Australian, Indian-American, Nigerian-British, Chinese-Canadian creators make content about going home — and the cost of going home is a recurring pain point. Research documents unusually high parasocial trust in this category because creator and viewer share a specific lived problem: the expensive long-haul ticket home for the holidays. The trip is non-negotiable, not aspirational — they were going to spend the money anyway.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">Hook: <strong>"Telling my mom I'm coming home for Christmas — and I'm flying business."</strong> Walk through FlightPoints screen showing Cathay/JAL/Qatar partner availability. Show the points cost vs. $7K cash equivalent. This is the highest-converting hook in this segment because emotional payload + receipts + non-optional trip.</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 05</div>
+              <div class="micro-card-name">Gaming / Esports / "Optimization Brain" Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">TikTok + YouTube</span>
+                <span class="micro-tag tag-range">15K–100K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">The "min-max" mindset is identical to award redemption thinking — "what's the highest CPP I can extract from this point currency" is the exact same brain function as "what's the optimal build for this raid." Almost no travel brand activates here. Zero competition.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">Hook: <strong>"This is the most broken meta in real life and nobody's playing it."</strong> Format: 60-sec TikTok with screen-record FlightPoints search overlaid, gaming voice. Conversion isn't about travel — it's about the dopamine of cracking a system. Gamers who plan a Honkai Star Rail rotation will plan an Avianca LifeMiles redemption.</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 06</div>
+              <div class="micro-card-name">Fashion Haul / Heavy-Spender Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">TikTok + Instagram</span>
+                <span class="micro-tag tag-range">15K–80K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">Fashion haul creators are the highest-spend category per follower in the lifestyle ecosystem. Their followers are the people running up sign-up bonus minimum spends without realizing it. Pure dormant demand — they already have the points, they've just never redeemed them.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">Get-ready-with-me with credit card reveal at the end. Hook: <strong>"I spent $4K on this Sephora haul and got $1,200 back in flights."</strong> Show FlightPoints search demo overlay. Reframes spending as virtue, not vice — the exact emotional driver this segment needs.</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 07</div>
+              <div class="micro-card-name">Wedding / Honeymoon Planning Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">Pinterest + IG + TikTok</span>
+                <span class="micro-tag tag-range">10K–50K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">Honeymoons are the "first big international trip" for this segment. 92% of couples self-fund honeymoons; average spend is $5K+. This is the single most likely catalyst to acquire a premium travel card — and FlightPoints should be the tool they use to redeem.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">Hook: <strong>"My wedding paid for my honeymoon."</strong> Walk through: $40K wedding spend → one premium card → FlightPoints surfacing Maldives business seats for 280K points + $230 in taxes (cash equivalent: $24,000). IG Reel + carousel breakdown.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="inner-panel" id="seg1-hooks">
+        <div class="seg-card" style="margin-bottom:0">
+          <div class="seg-mini-title">Content Hooks — What Works for This Segment</div>
+          <div class="hooks-grid">
+            <div class="hook-card"><div class="hook-number">Hook 01</div>"How a 23-year-old Bain analyst flew her parents business class to Mumbai for $147." — Specific persona, specific number, taps the diaspora driver.</div>
+            <div class="hook-card"><div class="hook-number">Hook 02</div>"Your time is worth $150 an hour. Stop spending six hours hunting award space." — Reframes for the billable-hour, HENRY mindset.</div>
+            <div class="hook-card"><div class="hook-number">Hook 03</div>"You have a Sapphire Preferred. Now what? The five-redemption playbook for first-time bookers." — Pairs naturally with Humphrey Yang or Vivian Tu.</div>
+            <div class="hook-card"><div class="hook-number">Hook 04</div>"Honeymoon for 2 in Bora Bora. Cash: $24,000. Points: 280K + $230 in taxes. Here's how." — Universal in the 26–28 cohort.</div>
+            <div class="hook-card"><div class="hook-number">Hook 05</div>"Reddit's r/awardtravel spent four hours debating this. FlightPoints answers in four seconds." — Meta-acknowledges the validator community they live in.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEG 2 -->
+    <div class="segment-panel seg2" id="seg-2">
+      <div class="inner-tabs">
+        <button class="inner-tab active" onclick="showInner(2,'overview')">Segment Overview</button>
+        <button class="inner-tab" onclick="showInner(2,'archetypes')">Micro-Influencer Archetypes</button>
+        <button class="inner-tab" onclick="showInner(2,'hooks')">Content Hooks</button>
+      </div>
+      <div class="inner-panel active" id="seg2-overview">
+        <div class="seg-header seg-header-3col">
+          <div class="seg-card hero-card">
+            <div>
+              <div class="seg-name">The Climbing<br>Optimizer</div>
+              <div class="seg-ages">Ages 28–37 · Conversion Engine</div>
+              <div class="seg-desc">Dual-income tech couples in San Francisco, post-MBA consultants in New York, surgical residents finishing training in Boston, founders post-Series-A. 30–35% DINK, 60–65% early-family with kids 0–7. Over half of Chase Sapphire Reserve holders are millennials.</div>
+            </div>
+            <div>
+              <div class="seg-hhi">$150K–$400K+</div>
+              <div class="seg-hhi-label">HHI (dual-income professionals)</div>
+            </div>
+          </div>
+          <div class="seg-card">
+            <div class="seg-mini-title">Platform Priority</div>
+            <div class="platform-bar-list">
+              <div class="platform-bar-item"><div class="platform-bar-label"><span>YouTube Long-form</span><span>Primary · 5.2% micro ER</span></div><div class="platform-bar-track"><div class="platform-bar-fill" style="width:92%"></div></div></div>
+              <div class="platform-bar-item"><div class="platform-bar-label"><span>Podcasts / Newsletters</span><span>Commute</span></div><div class="platform-bar-track"><div class="platform-bar-fill" style="width:80%"></div></div></div>
+              <div class="platform-bar-item"><div class="platform-bar-label"><span>Instagram</span><span>Inspiration</span></div><div class="platform-bar-track"><div class="platform-bar-fill" style="width:70%"></div></div></div>
+              <div class="platform-bar-item"><div class="platform-bar-label"><span>Substack/beehiiv</span><span>Morning routine</span></div><div class="platform-bar-track"><div class="platform-bar-fill" style="width:68%"></div></div></div>
+              <div class="platform-bar-item"><div class="platform-bar-label"><span>TikTok</span><span>Declining</span></div><div class="platform-bar-track"><div class="platform-bar-fill" style="width:35%"></div></div></div>
+            </div>
+          </div>
+          <div class="seg-card">
+            <div class="seg-mini-title">Emotional Triggers</div>
+            <ul class="trigger-list">
+              <li><span class="trigger-dot"></span>Time scarcity is rising AND stakes rising simultaneously</li>
+              <li><span class="trigger-dot"></span>"P2 mode" — running partner's spend for double welcome bonuses</li>
+              <li><span class="trigger-dot"></span>52% struggle to understand which card rewards are best (Ipsos)</li>
+              <li><span class="trigger-dot"></span>Anniversary / honeymoon upgrade aspirations</li>
+              <li><span class="trigger-dot"></span>Early family — first big trip with infant/toddler</li>
+              <li><span class="trigger-dot"></span>46% don't feel financially secure (Deloitte 2025) despite high income</li>
+            </ul>
+          </div>
+          <div class="seg-card">
+            <div class="seg-mini-title">Influencer Archetypes They Trust</div>
+            <ul class="trigger-list">
+              <li><span class="trigger-dot"></span><strong>Practical Personal Finance Authority</strong> — Ramit Sethi, Money Guy Show, Tori Dunlap</li>
+              <li><span class="trigger-dot"></span><strong>Optimization Hacker Podcaster</strong> — Chris Hutchins / All The Hacks (1M+ listeners)</li>
+              <li><span class="trigger-dot"></span><strong>Couple Travel Creator</strong> — Lindsay Silberman, Brown Eyed Flower Child</li>
+              <li><span class="trigger-dot"></span><strong>Money-Mindset Creator</strong> — Money with Katie, milestones-focused content</li>
+            </ul>
+          </div>
+          <div class="seg-card">
+            <div class="seg-mini-title">Key Life Milestones (Triggers)</div>
+            <ul class="trigger-list">
+              <li><span class="trigger-dot"></span>Card portfolio grows 5–12 cards, spend hits $10–15K/month</li>
+              <li><span class="trigger-dot"></span>Baby's first international trip planning</li>
+              <li><span class="trigger-dot"></span>54% of millennials check YouTube daily, 37% binge daily (Comscore)</li>
+              <li><span class="trigger-dot"></span>Discovering The Points Guy ecosystem for first time</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="inner-panel" id="seg2-archetypes">
+        <div class="adjacency-box">
+          <div class="adj-title">Lifestyle Adjacency Logic — Why Non-Travel Creators Convert This Segment</div>
+          <p>This is a "P2 mode" segment — partners share a household financial system, so messaging needs to acknowledge two-card-stack thinking. They watch YouTube while making dinner and listen to podcasts on a Peloton. The format must be substantive enough to feel like research, not entertainment. The key insight: productivity YouTubers, DINK couples, and SaaS-stack newsletter authors already frame their content around optimization — FlightPoints fits naturally as a $99.99/year line in their tool stack.</p>
+        </div>
+        <div class="micro-grid">
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 01</div>
+              <div class="micro-card-name">Productivity / "Life Optimization" YouTuber</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">YouTube + Newsletter</span>
+                <span class="micro-tag tag-range">20K–100K subscribers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">The Ali Abdaal micro-tier — "second-brain" creators, Tiago Forte–adjacent newsletter authors, Thomas Frank Explains imitators — speaks directly to this segment. Their audiences over-index on consultants, tech PMs, and founders. FlightPoints is a productivity tool: "stop wasting hours searching United.com for award seats."</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">Position FlightPoints as a tool-stack integration. Format: "The Tool I Use to Save 8 Hours and $4,000 on Every Trip" or slot it into their existing "SaaS I pay for" series. Hook: <strong>"I plan family travel like I plan quarterly OKRs."</strong> Show FlightPoints screen-recording in a tight 2-minute YouTube segment. $99.99/year is already in their subscription envelope.</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 02</div>
+              <div class="micro-card-name">DINK / Couples Vlog Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">YouTube + Instagram</span>
+                <span class="micro-tag tag-range">15K–80K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">Couples creators model the two-card household. Their audience IS the dual-income early-family target. This is the "Aunt Kara" template at the lifestyle scale — the IT professional couple documenting $125K in points-funded family travel resonates deeply with 30–35 dual-income viewers.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">Format: YouTube 12–18 min walking through how the household coordinates card applications, splits transferable points (Chase UR, Amex MR), and uses FlightPoints for two. Hook: <strong>"Anniversary trip on points: how we flew Polaris to Lisbon for $11.20 each."</strong> Specific city, specific math — virally re-shares in Award Travel 101.</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 03</div>
+              <div class="micro-card-name">Cooking-at-Home / Foodie Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">Instagram + YouTube</span>
+                <span class="micro-tag tag-range">15K–80K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">The Amex Gold demographic. Foodies in this age bracket spend disproportionately on dining/groceries — literally the Amex Gold 4x bonus categories. They've often opened a Gold for the bonus and never figured out how to redeem MR points. They are point-rich and tool-poor.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">IG Reel kitchen content with mid-roll credit-card reveal. Hook: <strong>"My grocery bill is funding our anniversary trip to Tokyo."</strong> Connect existing high-spend behavior (food) to the dormant points balance they've forgotten about. Pairs with a longer YouTube companion video.</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 04</div>
+              <div class="micro-card-name">Home Renovation / "Reno Diary" Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">YouTube + Instagram</span>
+                <span class="micro-tag tag-range">15K–60K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">Home renos are massive credit card spend events — $30K–$150K through one card in a 6-month window. These creators are typically 30–37, dual-income, first-home-with-kids — exact FlightPoints psychographic at peak spend velocity.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">IG carousel + 8-min YouTube companion. Hook: <strong>"Our kitchen renovation paid for our family's first international trip."</strong> Show the contractor invoices paid on card → FlightPoints search → flight booked. Reframes a stressful expense as a wealth-generating event.</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 05</div>
+              <div class="micro-card-name">Working Parent / "Mom-of-Toddler + Career" Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">TikTok + IG + Substack</span>
+                <span class="micro-tag tag-range">15K–70K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">Working-mom creators in their early 30s with kids 0–4 are planning their first major family international trip. Their content is high-trust because the time-scarcity narrative is completely real. Bridges Segment 2 and 3 perfectly.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">TikTok DITL with FlightPoints featured during the kid's nap segment. Hook: <strong>"I had 47 minutes today and I booked a $5,000 family vacation in 12 of them."</strong> Time as the hero, not money. Specifically resonates with "P2 mode" partners who want a tool that doesn't require a spreadsheet hobby.</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 06</div>
+              <div class="micro-card-name">Startup Founder / "Building in Public" Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">Twitter/X + Substack + LinkedIn</span>
+                <span class="micro-tag tag-range">10K–50K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">Founder content audiences are dual-income high-earners running every operating expense through a Brex/Ramp business card AND a personal Sapphire Reserve. They're the highest-velocity sign-up-bonus-chasers in the segment. They convert on tools, not lifestyle pitches.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">Long-form Twitter/X thread + Substack post. Hook: <strong>"$99/yr to never lose 4 hours to award search again. ROI: ~12,000%."</strong> Frames the purchase as a B2B-style ROI calculation — the cognitive frame this audience defaults to.</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 07</div>
+              <div class="micro-card-name">Post-MBA / "P2 Partner" Niche Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">LinkedIn + Instagram + YouTube</span>
+                <span class="micro-tag tag-range">10K–40K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">Consultants and tech road-warriors have status (UA Premier 1K, Marriott Titanium). Their partners (the "P2") have massive idle MR/UR points balances. We sell to the P2 — the non-traveling partner who books all leisure trips. This is an explicitly underserved content territory.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">IG Reel + YouTube 8-min. Hook: <strong>"My husband flies United for work. I use his points to fly us to Hawaii."</strong> "P2 mode" is an actual identity in points communities — this reframes the non-traveling partner as the power user.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="inner-panel" id="seg2-hooks">
+        <div class="seg-card">
+          <div class="seg-mini-title">Content Hooks — What Works for This Segment</div>
+          <div class="hooks-grid">
+            <div class="hook-card"><div class="hook-number">Hook 01</div>"Stop searching 12 airline sites. Find every business-class award seat for your family in 30 seconds." — Direct time-scarcity reframe.</div>
+            <div class="hook-card"><div class="hook-number">Hook 02</div>"Anniversary trip on points: how a Toronto couple flew Polaris to Lisbon for $11.20 each." — Specific city, specific math — virally re-shares in Award Travel 101.</div>
+            <div class="hook-card"><div class="hook-number">Hook 03</div>"Optimize your honeymoon points strategy before the wedding chaos starts." — DINK segment hook; pairs with Lindsay Silberman or Money with Katie.</div>
+            <div class="hook-card"><div class="hook-number">Hook 04</div>"You're paying $4,800 a year in card annual fees. Are you actually getting $4,800 back?" — Ramit Sethi-coded reframe; triggers the optimizer instinct.</div>
+            <div class="hook-card"><div class="hook-number">Hook 05</div>"The award-travel hack moms in your local Facebook group don't know yet." — Plays into Group discovery dynamic; works with regional creators.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEG 3 -->
+    <div class="segment-panel seg3" id="seg-3">
+      <div class="inner-tabs">
+        <button class="inner-tab active" onclick="showInner(3,'overview')">Segment Overview</button>
+        <button class="inner-tab" onclick="showInner(3,'archetypes')">Micro-Influencer Archetypes</button>
+        <button class="inner-tab" onclick="showInner(3,'hooks')">Content Hooks</button>
+      </div>
+      <div class="inner-panel active" id="seg3-overview">
+        <div class="seg-header seg-header-3col">
+          <div class="seg-card hero-card">
+            <div>
+              <div class="seg-name">The Family<br>Optimizer</div>
+              <div class="seg-ages">Ages 35–45 · Largest Segment</div>
+              <div class="seg-desc">The planner-personality marketing director with two kids, the pediatrician with three kids who plans everything in a shared Notion, the lawyer juggling spring break + ski week + multi-gen Italy trip. The canonical FlightPoints use case: finding 4 saver business-class seats together.</div>
+            </div>
+            <div>
+              <div class="seg-hhi">$200K–$500K</div>
+              <div class="seg-hhi-label">HHI (prime earning years, dual-income)</div>
+            </div>
+          </div>
+          <div class="seg-card">
+            <div class="seg-mini-title">Platform Priority</div>
+            <div class="platform-bar-list">
+              <div class="platform-bar-item"><div class="platform-bar-label"><span>Facebook Groups</span><span>Dominant</span></div><div class="platform-bar-track"><div class="platform-bar-fill" style="width:95%"></div></div></div>
+              <div class="platform-bar-item"><div class="platform-bar-label"><span>YouTube Long-form</span><span>Primary</span></div><div class="platform-bar-track"><div class="platform-bar-fill" style="width:88%"></div></div></div>
+              <div class="platform-bar-item"><div class="platform-bar-label"><span>Podcasts</span><span>Pickup/dropoff</span></div><div class="platform-bar-track"><div class="platform-bar-fill" style="width:75%"></div></div></div>
+              <div class="platform-bar-item"><div class="platform-bar-label"><span>Instagram</span><span>"Wine & scroll" 8–10pm</span></div><div class="platform-bar-track"><div class="platform-bar-fill" style="width:65%"></div></div></div>
+              <div class="platform-bar-item"><div class="platform-bar-label"><span>Pinterest</span><span>Trip-board organizing</span></div><div class="platform-bar-track"><div class="platform-bar-fill" style="width:50%"></div></div></div>
+            </div>
+          </div>
+          <div class="seg-card">
+            <div class="seg-mini-title">Emotional Triggers</div>
+            <ul class="trigger-list">
+              <li><span class="trigger-dot"></span>Time scarcity is the dominant emotional state — logistics-heavy life</li>
+              <li><span class="trigger-dot"></span>Avg US family spent $8,052 on travel in 2024, up 20% YoY</li>
+              <li><span class="trigger-dot"></span>50%+ of parents now plan trips with grandparents + kids (multi-gen)</li>
+              <li><span class="trigger-dot"></span>"Spring break blackout dates" — the universal family-travel pain point</li>
+              <li><span class="trigger-dot"></span>63% plan "detour destinations" on main trips (Expedia Unpack '25)</li>
+              <li><span class="trigger-dot"></span>48% of families plan to use AI tools for trip planning (Skift/AYTM)</li>
+            </ul>
+          </div>
+          <div class="seg-card">
+            <div class="seg-mini-title">Influencer Archetypes They Trust</div>
+            <ul class="trigger-list">
+              <li><span class="trigger-dot"></span><strong>Practical Family Points Creator</strong> — Frequent Miler, Award Travel 101, Thrifty Traveler</li>
+              <li><span class="trigger-dot"></span><strong>Family Travel Power-Couple</strong> — The Bucket List Family, Kara and Nate (Daily Drop)</li>
+              <li><span class="trigger-dot"></span><strong>Mom Influencer with Travel Bent</strong> — Cup of Jo, Big Little Feelings, Dr. Becky Kennedy</li>
+              <li><span class="trigger-dot"></span><strong>Practical Personal Finance</strong> — Ramit Sethi, Money Guy Show, ChooseFI</li>
+            </ul>
+          </div>
+          <div class="seg-card">
+            <div class="seg-mini-title">Key Data Points</div>
+            <ul class="trigger-list">
+              <li><span class="trigger-dot"></span>Pinterest reaches 64.7% of US mothers (Comscore)</li>
+              <li><span class="trigger-dot"></span>"Wine and scroll" 8–10 PM Facebook Group browsing behavior</li>
+              <li><span class="trigger-dot"></span>88% of parents say travel helps kids overcome pandemic-era social impacts (FTA 2025)</li>
+              <li><span class="trigger-dot"></span>Cup of Jo / Big Little Feelings earnest aesthetic outperforms IG-perfect glossy travel content</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="inner-panel" id="seg3-archetypes">
+        <div class="adjacency-box">
+          <div class="adj-title">Lifestyle Adjacency Logic — Why Non-Travel Creators Convert This Segment</div>
+          <p>The "real receipts" audience. This segment converts via Facebook Group recommendation, a podcast host-read from someone they've listened to for 2 years, or a long-form blog review. They will NOT convert from a hyped-up TikTok. The key is embedding FlightPoints inside content categories these moms and dads are already consuming — Sunday reset routines, home organization, school-sport parent communities. FlightPoints is positioned not as a travel tool but as a household-operations upgrade. The $99.99 sub is invisible at this income level — the only friction is trust.</p>
+        </div>
+        <div class="micro-grid">
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 01</div>
+              <div class="micro-card-name">Disney / Theme-Park Mom Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">Facebook + YouTube + IG</span>
+                <span class="micro-tag tag-range">15K–80K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">Disney parents are the most plan-obsessed sub-segment in family travel. They already deep-dive optimization (rope drop strategy, Lightning Lane logic). They are desperate for advice on booking peak-season trips — exactly the hardest-availability scenario where FlightPoints' partner-airline search shines.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">YouTube 12-min screen-record of FlightPoints workflow + IG carousel. Hook: <strong>"Disney trip total: $4,800. What we paid in cash for flights: $87.20."</strong> Then push into Disney mom Facebook Groups organically (WDW Mom Boards) — some of the most engaged on the platform. Specificity + receipts is the tone this audience demands.</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 02</div>
+              <div class="micro-card-name">Mom-CEO / "Sunday Reset" Household Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">IG + TikTok + Substack</span>
+                <span class="micro-tag tag-range">15K–70K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">The "Sunday reset" micro-genre (meal-planning, family-calendar systems, capsule-wardrobe-for-kids, school-year prep) attracts exactly the "planner personality" with high precision. Audiences are 75%+ female, 35–50, $150K+ HHI — dispositionally inclined to like a tool that organizes a chaotic problem into a clean dashboard.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">TikTok/Reel during Sunday reset content. Hook: <strong>"My Sunday reset just paid for our trip to Greece."</strong> Frame FlightPoints as the "travel" category in their household-ops system — same way they have a system for meal planning. Habit-stacks the FlightPoints behavior onto an existing ritual.</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 03</div>
+              <div class="micro-card-name">School-Age Family Travel Blogger</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">Blog + Pinterest + IG</span>
+                <span class="micro-tag tag-range">15K–60K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">Bloggers like A Mom Explores, Top Flight Family, and the Black Kids Do Travel / The MOM Trotter community write the long-form trip planning posts moms read at 9pm. Their spring-break/summer-break content cycles map directly to FlightPoints' high-intent windows.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">Long-form blog (1,500+ words) with FlightPoints embedded as "the tool I used" section + Pinterest pin graphic. Hook: <strong>"Spring break flights are already $1,400 per kid. Here's how to ignore that number."</strong> Solves the segment's #1 emotional trigger: spring-break blackout dates.</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 04</div>
+              <div class="micro-card-name">Home Organization / "The Home Edit"–Style Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">Instagram + TikTok</span>
+                <span class="micro-tag tag-range">15K–80K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">Organization creators attract the "planner personality" with extreme precision. Their audience is 75%+ female, 35–50, $150K+ HHI. They respond to tools that organize chaos into a clean interface — which is precisely what FlightPoints does for award search.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">IG carousel showing points dashboard, FlightPoints as "the Sterilite bin for your travel." Hook: <strong>"I organize my credit card points the same way I organize my pantry."</strong> Reframes a financial product as a home-organization product — much lower psychological resistance than a "travel hack" pitch.</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 05</div>
+              <div class="micro-card-name">School Sports Parent / "Travel Team" Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">Facebook Groups + IG</span>
+                <span class="micro-tag tag-range">10K–40K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">Massively underexploited niche. Club soccer, AAU basketball, junior tennis, club volleyball parents fly 8–14 weekends/year. They are the highest-frequency family domestic flyers in the entire segment. They're also active in tight Facebook Groups by sport. First-mover advantage — no competitor serves this use case.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">Facebook Group post + IG Reel. Hook: <strong>"15 tournament weekends. 0 dollars in flight cash."</strong> Show FlightPoints surfacing domestic award seats for tournament weekends. This use case is entirely uncovered by any competitor.</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 06</div>
+              <div class="micro-card-name">Family Meal Prep / Household-Finance Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">IG + TikTok + YouTube</span>
+                <span class="micro-tag tag-range">15K–60K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">The Budget Mom (Kumiko Love) micro-tier, "stay-at-home-CFO" creators. These blend personal finance with motherhood and skew 32–45. They already track card spend for budgeting — they're the most analytically-primed audience in the segment for understanding points accumulation math.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">Format: "What we spent last month" breakdown where the creator adds up Costco, Whole Foods, Target, school activities → multiplies by card bonus categories → arrives at points balance → FlightPoints converts it to a family trip. Hook: <strong>"Our grocery bill generated a $4,200 flight. Here's the math."</strong></div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 07</div>
+              <div class="micro-card-name">Multi-Generational / "Trip with Grandma" Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">YouTube + Pinterest + IG</span>
+                <span class="micro-tag tag-range">15K–50K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">Multi-gen trips are the segment's emotional Mt. Everest — involving booking 6–10 tickets simultaneously, which is precisely where award search engines provide the most acute time savings. This is the canonical FlightPoints ROI demonstration.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">YouTube 10-min walkthrough + IG carousel. Hook: <strong>"Booking 8 award seats for 3 generations in 1 hour."</strong> "My mom has been dreaming of this trip for 20 years. We booked it for $200 in fees." High emotional payload + obvious tool-use case + the kind of receipts that get screenshot-shared in Facebook Groups.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="inner-panel" id="seg3-hooks">
+        <div class="seg-card">
+          <div class="seg-mini-title">Content Hooks — What Works for This Segment</div>
+          <div class="hooks-grid">
+            <div class="hook-card"><div class="hook-number">Hook 01</div>"From signup bonus to family-of-5 in business class to Hawaii — here's the exact playbook." — TPG/Frequent Miler-style transparency with real receipts.</div>
+            <div class="hook-card"><div class="hook-number">Hook 02</div>"Spring break blackout dates? Here are the four weeks of award space we found." — Solves the canonical pain point. Works as a quarterly recurring format.</div>
+            <div class="hook-card"><div class="hook-number">Hook 03</div>"How to take three generations to Japan on points." — Multi-gen is the fastest-growing premium-redemption use case.</div>
+            <div class="hook-card"><div class="hook-number">Hook 04</div>"You have eight weeks of vacation per year. Make every flight count." — Reframes points as time leverage, the core driver for this HHI level.</div>
+            <div class="hook-card"><div class="hook-number">Hook 05</div>"The award-search tool moms in [city] Facebook Groups are quietly using to win spring break." — Plays into the Group peer-validation dynamic; works regionally.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEG 4 -->
+    <div class="segment-panel seg4" id="seg-4">
+      <div class="inner-tabs">
+        <button class="inner-tab active" onclick="showInner(4,'overview')">Segment Overview</button>
+        <button class="inner-tab" onclick="showInner(4,'archetypes')">Micro-Influencer Archetypes</button>
+        <button class="inner-tab" onclick="showInner(4,'hooks')">Content Hooks</button>
+      </div>
+      <div class="inner-panel active" id="seg4-overview">
+        <div class="seg-header seg-header-3col">
+          <div class="seg-card hero-card">
+            <div>
+              <div class="seg-name">The Veteran<br>Hobbyist</div>
+              <div class="seg-ages">Ages 42–50 · The Bullseye</div>
+              <div class="seg-desc">The 47-year-old surgeon in Chicago with $700K HHI and 14 cards. The 49-year-old law firm partner in Manhattan who reads FlyerTalk daily. The 50-year-old empty-nester couple in Toronto leveraging Aeroplan and Amex MR for European trips. <em>They view points optimization as an intellectual hobby on par with golf or wine collecting.</em></div>
+            </div>
+            <div>
+              <div class="seg-hhi">$300K–$1.2M+</div>
+              <div class="seg-hhi-label">HHI (peak career, Gen X affluent avg $321K)</div>
+            </div>
+          </div>
+          <div class="seg-card">
+            <div class="seg-mini-title">Platform Priority</div>
+            <div class="platform-bar-list">
+              <div class="platform-bar-item"><div class="platform-bar-label"><span>Newsletters/Blogs</span><span>Primary · 40–55% open rate</span></div><div class="platform-bar-track"><div class="platform-bar-fill" style="width:96%"></div></div></div>
+              <div class="platform-bar-item"><div class="platform-bar-label"><span>YouTube Long-form</span><span>Evening TV</span></div><div class="platform-bar-track"><div class="platform-bar-fill" style="width:88%"></div></div></div>
+              <div class="platform-bar-item"><div class="platform-bar-label"><span>Facebook Groups</span><span>Peer validation</span></div><div class="platform-bar-track"><div class="platform-bar-fill" style="width:82%"></div></div></div>
+              <div class="platform-bar-item"><div class="platform-bar-label"><span>Podcasts</span><span>Commute/gym</span></div><div class="platform-bar-track"><div class="platform-bar-fill" style="width:78%"></div></div></div>
+              <div class="platform-bar-item"><div class="platform-bar-label"><span>TikTok</span><span>Essentially absent</span></div><div class="platform-bar-track"><div class="platform-bar-fill" style="width:8%"></div></div></div>
+            </div>
+          </div>
+          <div class="seg-card">
+            <div class="seg-mini-title">Emotional Triggers (Ranked)</div>
+            <ul class="trigger-list">
+              <li><span class="trigger-dot"></span><strong>Time scarcity</strong> — billable rates of $300–$1,500/hr make a 6-hr award search a $2K–$9K opportunity cost</li>
+              <li><span class="trigger-dot"></span><strong>Optimization thrill</strong> — the dopamine of finding 4-cabin saver to Tokyo</li>
+              <li><span class="trigger-dot"></span><strong>Family legacy</strong> — 65% prioritize travel experiences over material gifts (FTA 2024)</li>
+              <li><span class="trigger-dot"></span><strong>Status</strong> — Hyatt Globalist, Centurion, Concierge Key, suite upgrades</li>
+              <li><span class="trigger-dot"></span><strong>Peer comparison</strong> — colleagues at firm/hospital are visibly traveling well</li>
+            </ul>
+          </div>
+          <div class="seg-card">
+            <div class="seg-mini-title">Influencer Archetypes They Trust</div>
+            <ul class="trigger-list">
+              <li><span class="trigger-dot"></span><strong>Newsletter Operator</strong> — Frequent Miler (highest-trust), Doctor of Credit (no affiliate links), Daily Drop</li>
+              <li><span class="trigger-dot"></span><strong>Points Veteran</strong> — Gary Leff/VFTW (since 2002), Ben Schlappig/OMAAT (since 2008)</li>
+              <li><span class="trigger-dot"></span><strong>Optimization Hacker Podcaster</strong> — Chris Hutchins/All The Hacks (1M+ listeners)</li>
+              <li><span class="trigger-dot"></span><strong>Niche Community Operator</strong> — Devon Gimbel MD, Award Travel 101 moderators, 10xTravel's Bryce Conway</li>
+              <li><span class="trigger-dot"></span><strong>Trip Report YouTuber</strong> — Sam Chui (3.9M YT), Josh Cahill, Noel Philips</li>
+            </ul>
+          </div>
+          <div class="seg-card">
+            <div class="seg-mini-title">Their 9pm Planning Hour (Behavior)</div>
+            <ul class="trigger-list">
+              <li><span class="trigger-dot"></span>6 AM — Daily Drop newsletter with coffee</li>
+              <li><span class="trigger-dot"></span>Commute — Frequent Miler on the Air / All The Hacks podcast</li>
+              <li><span class="trigger-dot"></span>Lunch — r/awardtravel or Doctor of Credit when an Amex offer drops</li>
+              <li><span class="trigger-dot"></span>9–11 PM — ExpertFlyer, Seats.aero, AwardTool, FlightPoints open in browser tabs simultaneously</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="inner-panel" id="seg4-archetypes">
+        <div class="adjacency-box">
+          <div class="adj-title">Lifestyle Adjacency Logic — Why Non-Travel Creators Convert This Segment</div>
+          <p>The Veteran Hobbyist is the only segment where we do recruit from the points niche at the micro-tier. But the larger opportunity is in affluent hobby crossover — golf, wine, watches, FIRE, physician-finance — because these creators reach the exact demographic without competing in the saturated points-niche where Frequent Miler, OMAAT, and Live and Let's Fly already dominate. A 47-year-old surgeon watching a golf travel vlog does not need to be "taught" points — they need to discover FlightPoints specifically as the search layer they've been missing. The brief: deliver depth, never hype, and require honest product comparisons.</p>
+        </div>
+        <div class="micro-grid">
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 01</div>
+              <div class="micro-card-name">Physician / Lawyer Finance Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">Substack + YouTube + Podcast</span>
+                <span class="micro-tag tag-range">10K–60K subscribers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">The White Coat Investor / Physician on FIRE ecosystem at the micro tier. These creators have audiences who understand opportunity-cost math intuitively. Physician on FIRE explicitly publishes credit card content and runs a monetized affiliate engine. The micro-tier creators in this niche are an underexploited activation layer.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">Substack newsletter sponsorship + 25-min YouTube video. Hook: <strong>"At a $750/hr opportunity cost, every hour I save searching for awards is worth more than the FlightPoints annual fee."</strong> Opportunity-cost framing is the only frame that converts this segment. Show real math.</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 02</div>
+              <div class="micro-card-name">FIRE / Financial Independence Blogger</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">Blog + YouTube + Podcast</span>
+                <span class="micro-tag tag-range">15K–80K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">ChooseFI, Physician on FIRE, Afford Anything, Our Next Life — and the long tail of micro-tier FIRE creators — all incorporate credit card rewards content because of the documented "stacking" interaction with FI math. FIRE audiences index extremely high on travel-rewards conversion.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">Long-form blog post + podcast guest spot. Hook: <strong>"$99 to compress 8 hours of search per quarter. At my hourly rate, this is a 20x ROI tool."</strong> Gives the audience a frame to justify the subscription as "FI-aligned" — overcomes the segment's reflexive frugality while respecting their analytical standard.</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 03</div>
+              <div class="micro-card-name">Golf Travel / "Bucket List Golf" Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">YouTube + Instagram</span>
+                <span class="micro-tag tag-range">15K–70K subscribers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">Pure non-obvious arbitrage. The micro-tier golf YouTube space has affluent male audiences age 40–55 who routinely fly to St Andrews, Bandon Dunes, Pinehurst, Streamsong. They need long-haul premium-cabin redemptions but rarely connect "golf trip" to "Avios sweet spots." Zero saturation from any competitor.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">YouTube vlog with FlightPoints featured during the trip-planning episode. Hook: <strong>"The flights to St Andrews were 'free.' The greens fees were not."</strong> Golf content unchanged — FlightPoints appears only in the planning segment. Highly visual, highly aspirational, perfectly on-segment.</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 04</div>
+              <div class="micro-card-name">Wine / Whiskey / Collector Lifestyle Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">Instagram + YouTube</span>
+                <span class="micro-tag tag-range">10K–50K followers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">Wine/whiskey enthusiasts overlap heavily with the Centurion-card demographic (Amex Platinum has been explicitly courting them via Resy + curated experiences). Their content is consumed by the exact "I have idle MR points" audience. Completely underexploited.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">IG Reel + YouTube 15-min trip recap. Hook: <strong>"The wine wasn't free. The flights were."</strong> Fund a Burgundy/Bordeaux or Islay whisky trip with points. Status-aligned without being status-obsessed. The connoisseur identity at every level — including how you travel.</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 05</div>
+              <div class="micro-card-name">Boutique Points Newsletter / Micro-Tier Blog</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">Newsletter + YouTube</span>
+                <span class="micro-tag tag-range">5K–30K subscribers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">The only category where we recruit directly from the points niche — but specifically at the micro-tier: independent Substacks, Cards & Points, Miles Per Day, Aaron Hurd–style independent channels. 40–55% open rates in finance/travel verticals; 4–8% sponsored CTR. The highest-converting format in the entire strategy per dollar spent.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">Single-sponsor newsletter placement + companion YouTube. Hook: <strong>"I tested every award search engine on the market. Here's the unvarnished comparison."</strong> Brief creators to call out 1–2 honest limitations alongside strengths. This segment will ONLY convert from a substantively critical review. Flowery praise actively destroys trust.</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 06</div>
+              <div class="micro-card-name">Executive Lifestyle / Stealth-Wealth Creator</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">Substack + Instagram</span>
+                <span class="micro-tag tag-range">10K–40K subscribers</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">Permanent Style / "things tasteful older men buy" adjacent universe — Brooks Brothers, Loro Piana, Hodinkee-adjacent micro newsletters. Their audience is 40–55, high-income, connoisseur-identity, and responds to things positioned as well-built tools used by people who know.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">Newsletter: a 1,500-word "considered purchase" essay framing FlightPoints alongside a Loake shoe or Hodinkee watch — quiet, well-built tools. <strong>Avoid all percentage-off, bonus-point, "hack" language.</strong> This segment finds it gauche. The brief is: "The infrastructure I use to move from the Centurion Lounge to a Cathay First seat without a 4-hour search."</div>
+            </div>
+          </div>
+          <div class="micro-card">
+            <div class="micro-card-head">
+              <div class="micro-card-num">Archetype 07</div>
+              <div class="micro-card-name">Business / Entrepreneurship Podcast (Micro-Tier)</div>
+              <div class="micro-card-meta">
+                <span class="micro-tag tag-platform">Podcast + YouTube</span>
+                <span class="micro-tag tag-range">5K–50K listeners/episode</span>
+              </div>
+            </div>
+            <div class="micro-card-body">
+              <div class="micro-why">Acquired-adjacent micro-creator network, operator/builder podcasts in the 5K–50K listener range. Audience: 40s, business-owning, high-spend, high-trust listeners who've followed the host for years. These pods convert SaaS at exceptional rates.</div>
+              <div class="micro-brief-label">Content Brief</div>
+              <div class="micro-brief">Pursue full episode interviews ("How a 7-figure operator funds personal travel for free"), not banner ads. Specific angle: <strong>"The business-card optimization most 8-figure operators ignore."</strong> The host's personal FlightPoints story + $200 Tier C deal structure is the most cost-efficient pro-tier activation in the segment.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="inner-panel" id="seg4-hooks">
+        <div class="seg-card">
+          <div class="seg-mini-title">Content Hooks — What Works for This Segment</div>
+          <div class="hooks-grid">
+            <div class="hook-card"><div class="hook-number">Hook 01</div>"I tried six award search tools — here's the only one that found four J seats to Tokyo." — Comparison/contrarian framing with real receipts. Virally re-shares in AT101 and r/awardtravel.</div>
+            <div class="hook-card"><div class="hook-number">Hook 02</div>"Stop spending six hours of your Sunday searching for award space." — Direct time-scarcity reframe. The surgeon's hourly rate makes the math obvious.</div>
+            <div class="hook-card"><div class="hook-number">Hook 03</div>"Built for people who already know what a stopover is." — Anti-beginner positioning; signals depth, filters out noise. They hate being talked down to.</div>
+            <div class="hook-card"><div class="hook-number">Hook 04</div>"Search 26 transfer partners and last-seat business class in one query." — Substance, specific number, names the real pain point generic competitors don't solve.</div>
+            <div class="hook-card"><div class="hook-number">Hook 05</div>"Where points hobbyists go when point.me doesn't have what they need." — This audience prides itself on being beyond mainstream tools. Confident specific positioning is the surest signal of substance.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUDGET ALLOCATION -->
+<section class="section" style="background:var(--cream);">
+  <div class="container">
+    <p class="section-label">Budget Strategy</p>
+    <h2 class="section-title">Allocate by Lifetime Value, Not Audience Size</h2>
+    <div class="budget-visual">
+      <div class="budget-bars">
+        <div class="budget-bar-row">
+          <div class="budget-bar-label"><strong>Veteran Hobbyist</strong><br>42–50 · Bullseye</div>
+          <div class="budget-bar-outer"><div class="budget-bar-inner bb-seg4" style="width:25%">25%</div></div>
+        </div>
+        <div class="budget-bar-row">
+          <div class="budget-bar-label"><strong>Climbing Optimizer</strong><br>28–37 · Conversion Engine</div>
+          <div class="budget-bar-outer"><div class="budget-bar-inner bb-seg2" style="width:35%">35%</div></div>
+        </div>
+        <div class="budget-bar-row">
+          <div class="budget-bar-label"><strong>Family Optimizer</strong><br>35–45 · Largest Segment</div>
+          <div class="budget-bar-outer"><div class="budget-bar-inner bb-seg3" style="width:25%">25%</div></div>
+        </div>
+        <div class="budget-bar-row">
+          <div class="budget-bar-label"><strong>Aspiring Optimizer</strong><br>21–28 · Future ICP</div>
+          <div class="budget-bar-outer"><div class="budget-bar-inner bb-seg1" style="width:15%">15%</div></div>
+        </div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Budget Allocation — Visual Breakdown</div>
+        <div class="chart-canvas-wrap"><canvas id="budgetPieChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Platform allocation table -->
+    <div style="margin-top:36px;">
+      <p style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin-bottom:12px;">Platform Channel Allocation Per Segment</p>
+      <div class="alloc-table-wrap">
+      <table class="alloc-table">
+        <thead>
+          <tr>
+            <th>Segment</th>
+            <th>TikTok</th>
+            <th>Instagram</th>
+            <th>YouTube</th>
+            <th>Newsletter / Podcast</th>
+            <th>Facebook Groups</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>① Aspiring 21–28</strong></td>
+            <td><span class="alloc-pct" style="color:var(--seg1)">50%</span><div class="alloc-bar" style="width:50%; background:var(--seg1)"></div></td>
+            <td><span class="alloc-pct" style="color:var(--seg1)">30%</span><div class="alloc-bar" style="width:30%; background:var(--seg1)"></div></td>
+            <td><span class="alloc-pct" style="color:var(--seg1)">15%</span><div class="alloc-bar" style="width:15%; background:var(--seg1)"></div></td>
+            <td><span class="alloc-pct" style="color:var(--seg1)">5%</span><div class="alloc-bar" style="width:5%; background:var(--seg1)"></div></td>
+            <td><span class="alloc-pct" style="color:var(--muted)">—</span></td>
+          </tr>
+          <tr>
+            <td><strong>② Climbing 28–37</strong></td>
+            <td><span class="alloc-pct" style="color:var(--seg2)">15%</span><div class="alloc-bar" style="width:15%; background:var(--seg2)"></div></td>
+            <td><span class="alloc-pct" style="color:var(--seg2)">25%</span><div class="alloc-bar" style="width:25%; background:var(--seg2)"></div></td>
+            <td><span class="alloc-pct" style="color:var(--seg2)">35%</span><div class="alloc-bar" style="width:35%; background:var(--seg2)"></div></td>
+            <td><span class="alloc-pct" style="color:var(--seg2)">20%</span><div class="alloc-bar" style="width:20%; background:var(--seg2)"></div></td>
+            <td><span class="alloc-pct" style="color:var(--seg2)">5%</span><div class="alloc-bar" style="width:5%; background:var(--seg2)"></div></td>
+          </tr>
+          <tr>
+            <td><strong>③ Family 35–45</strong></td>
+            <td><span class="alloc-pct" style="color:var(--seg3)">10%</span><div class="alloc-bar" style="width:10%; background:var(--seg3)"></div></td>
+            <td><span class="alloc-pct" style="color:var(--seg3)">30%</span><div class="alloc-bar" style="width:30%; background:var(--seg3)"></div></td>
+            <td><span class="alloc-pct" style="color:var(--seg3)">25%</span><div class="alloc-bar" style="width:25%; background:var(--seg3)"></div></td>
+            <td><span class="alloc-pct" style="color:var(--seg3)">15%</span><div class="alloc-bar" style="width:15%; background:var(--seg3)"></div></td>
+            <td><span class="alloc-pct" style="color:var(--seg3)">20%</span><div class="alloc-bar" style="width:20%; background:var(--seg3)"></div></td>
+          </tr>
+          <tr>
+            <td><strong>④ Veteran 42–50</strong></td>
+            <td><span class="alloc-pct" style="color:var(--muted)">—</span></td>
+            <td><span class="alloc-pct" style="color:var(--seg4)">10%</span><div class="alloc-bar" style="width:10%; background:var(--seg4)"></div></td>
+            <td><span class="alloc-pct" style="color:var(--seg4)">30%</span><div class="alloc-bar" style="width:30%; background:var(--seg4)"></div></td>
+            <td><span class="alloc-pct" style="color:var(--seg4)">45%</span><div class="alloc-bar" style="width:45%; background:var(--seg4)"></div></td>
+            <td><span class="alloc-pct" style="color:var(--seg4)">15%</span><div class="alloc-bar" style="width:15%; background:var(--seg4)"></div></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:28px">
+      <strong>Volume target:</strong> At a $0–200 ceiling per activation, a $25K quarterly budget supports approximately 125 simultaneous activations — 50 creators for Segment 1 (mostly Tier A trade-only), 30 for Segment 2, 30 for Segment 3, and 15 for Segment 4 (weighted toward newsletter and podcast). This is the volume at which platform algorithms begin to recognize FlightPoints as a real entity in each lifestyle niche, producing organic discovery uplift beyond the paid activation cost.
+    </div>
+  </div>
+</section>
+
+<!-- 3-RING STRATEGY -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">Activation Framework</p>
+    <h2 class="section-title">The Three-Ring Strategy</h2>
+    <div class="rings-grid">
+      <div class="ring-card">
+        <div class="ring-number">1</div>
+        <div class="ring-label">Ring One · Conversion Engine</div>
+        <div class="ring-title">Deep Substance Partnerships</div>
+        <div class="ring-desc">6–8 long-term partnerships with bullseye substance creators. These are the conversion engine — trusted voices who can move a skeptical 47-year-old surgeon to a $99.99 annual subscription.</div>
+        <div class="ring-examples">
+          <div class="ring-example"><span class="ring-dot">→</span><span>Co-produced Frequent Miler newsletter series</span></div>
+          <div class="ring-example"><span class="ring-dot">→</span><span>Multi-month All The Hacks podcast integration</span></div>
+          <div class="ring-example"><span class="ring-dot">→</span><span>Award Travel 101 podcast + Facebook Group sponsorship</span></div>
+          <div class="ring-example"><span class="ring-dot">→</span><span>Going Awesome Places Canadian Aeroplan campaign</span></div>
+          <div class="ring-example"><span class="ring-dot">→</span><span>Devon Gimbel MD physician-segment cross-promo</span></div>
+        </div>
+      </div>
+      <div class="ring-card">
+        <div class="ring-number">2</div>
+        <div class="ring-label">Ring Two · Scaled Activation</div>
+        <div class="ring-title">100–150 Micro-Creator Network</div>
+        <div class="ring-desc">The new core of the strategy. 100–150 lifestyle-adjacent micro-creators per quarter, activated at $0–$200 each across the four lifestyle-adjacency categories identified per segment. Gifted-first, affiliate-kicker model.</div>
+        <div class="ring-examples">
+          <div class="ring-example"><span class="ring-dot">→</span><span>FinTok salary-transparency creators (Seg 1)</span></div>
+          <div class="ring-example"><span class="ring-dot">→</span><span>Productivity YouTubers + DINK couples (Seg 2)</span></div>
+          <div class="ring-example"><span class="ring-dot">→</span><span>Disney-family + Sunday-reset mom creators (Seg 3)</span></div>
+          <div class="ring-example"><span class="ring-dot">→</span><span>Golf/wine/FIRE/physician-finance micro-newsletters (Seg 4)</span></div>
+        </div>
+      </div>
+      <div class="ring-card">
+        <div class="ring-number">3</div>
+        <div class="ring-label">Ring Three · Non-Negotiable</div>
+        <div class="ring-title">Organic Community Presence</div>
+        <div class="ring-desc">Not paid. Not optional. The bullseye audience WILL Google "FlightPoints reddit" before paying. Without organic credibility, Ring 1 and Ring 2 investment is wasted.</div>
+        <div class="ring-examples">
+          <div class="ring-example"><span class="ring-dot">→</span><span>CEO/technical AMA in r/awardtravel and r/churning</span></div>
+          <div class="ring-example"><span class="ring-dot">→</span><span>Transparent participation in Award Travel 101 threads</span></div>
+          <div class="ring-example"><span class="ring-dot">→</span><span>Sweet-spot guest posts on Frequent Miler or OMAAT</span></div>
+          <div class="ring-example"><span class="ring-dot">→</span><span>FlyerTalk member presence</span></div>
+          <div class="ring-example"><span class="ring-dot">→</span><span>CardCon / ZorkFest / Chicago Seminars attendance</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ANTI-PATTERNS -->
+<section class="section" style="background:var(--cream);">
+  <div class="container">
+    <p class="section-label">What Not To Do</p>
+    <h2 class="section-title">Anti-Patterns to Avoid at All Costs</h2>
+    <div class="anti-grid">
+      <div class="anti-card">
+        <div class="anti-title">🚫 Chase Saturated Travel-Hacker Macros</div>
+        <div class="anti-desc">The Points Guy, NerdWallet, Brian Kelly, @thatcreditcardguy (817K), Travel Daddy Dave (466K) all command rates that destroy unit economics. The strategy is lifestyle adjacency, not head-on competition in the saturated travel-hacker creator pool.</div>
+      </div>
+      <div class="anti-card">
+        <div class="anti-title">🚫 Hype Framing for Segments 3 and 4</div>
+        <div class="anti-desc">"I FLEW FIRST CLASS FOR FREE" thumbnails trigger immediate ad-blindness in audiences who've seen 1,000 of them. Real receipts, real friction, real numbers — the only creative approach that converts the 35–50 segment.</div>
+      </div>
+      <div class="anti-card">
+        <div class="anti-title">🚫 Under-Invest in Newsletters</div>
+        <div class="anti-desc">Newsletter sponsorships look "boring" but produce the highest conversion-to-paid-trial rate per dollar in the entire stack — especially for Segments 2 and 4. Newsletter CTR runs 4–8% in finance/travel verticals at 40–55% open rates. They look expensive; they're not.</div>
+      </div>
+      <div class="anti-card">
+        <div class="anti-title">🚫 Skip the Reddit Organic Seed</div>
+        <div class="anti-desc">A handful of authentic reviews in r/awardtravel, r/churning, r/personalfinance, r/AusFinance, and r/UKPersonalFinance creates a search-intent floor that paid creator activations bounce off of far more efficiently. Brief paid creators to also engage organically with disclosure in their relevant subreddits.</div>
+      </div>
+      <div class="anti-card">
+        <div class="anti-title">🚫 Over-Claim "Free Travel"</div>
+        <div class="anti-desc">Ongoing FTC/ASA/ACMA scrutiny of finfluencer content means "free flights" claims need to be qualified. Brief all creators to say "low-cost" or specify exact dollar figures in fees/taxes. Protects the brand from consumer-protection backlash building in the niche.</div>
+      </div>
+      <div class="anti-card">
+        <div class="anti-title">🚫 One-Off Deals in High-Trust Niches</div>
+        <div class="anti-desc">In the FIRE community, the loyalty blog/newsletter community, and Taiwan (guānxì culture), one-off deals erode credibility. Structure 6–12 month ambassador deals for Segment 4 especially. Multi-touch exposure to the same creator's audience compounds, and the per-impression rate drops 10–30%.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEASONAL PLANNING -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">Content Calendar</p>
+    <h2 class="section-title">Seasonal Rhythms — The Planning Calendar</h2>
+    <div class="calendar-grid">
+      <div class="cal-card">
+        <div class="cal-season" style="color:var(--accent2)">❄️ Winter</div>
+        <div class="cal-months">Jan – Feb</div>
+        <div class="cal-items">Spring break and summer intent searches spike. Family-segment creator content goes live. Push "spring break blackout dates" hook. Family optimizer campaigns. Best time to push multi-passenger search features.</div>
+      </div>
+      <div class="cal-card">
+        <div class="cal-season" style="color:var(--accent3)">🌸 Spring</div>
+        <div class="cal-months">Mar – May</div>
+        <div class="cal-items">Summer European multi-stop planning. Honeymoon and anniversary trip content for climbing optimizers. Couple travel creator campaigns. DINK segment conversion push before summer departure season.</div>
+      </div>
+      <div class="cal-card">
+        <div class="cal-season" style="color:var(--accent4)">☀️ Summer</div>
+        <div class="cal-months">Jun – Aug</div>
+        <div class="cal-items">Next-year luxury trip planning begins for veteran hobbyists. ANA First Class Japan / Qatar QSuites campaigns. All The Hacks and Frequent Miler integration windows. Multi-gen trip case study content. Golf Scotland / wine harvest season activations.</div>
+      </div>
+      <div class="cal-card">
+        <div class="cal-season" style="color:var(--accent)">🍂 Fall</div>
+        <div class="cal-months">Sep – Dec</div>
+        <div class="cal-items">School-year-start booking intent. Gift-of-travel and holiday redemption messaging. Devaluation news cycles — newsletter spikes in Daily Drop, Frequent Miler, Doctor of Credit. Couple-travel holiday campaigns. Black Friday Pro tier promotions.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KEY METRICS -->
+<section class="section" style="background:var(--cream);">
+  <div class="container">
+    <p class="section-label">Measurement Framework</p>
+    <h2 class="section-title">Track Three Lead Metrics. Not Vanity Counts.</h2>
+    <div class="metrics-trio">
+      <div class="metric-card" data-n="1">
+        <div class="metric-icon">🔍</div>
+        <div class="metric-title">Branded Search Lift</div>
+        <div class="metric-desc">People Googling "FlightPoints" in the 14 days after a creator post goes live. The most reliable leading indicator that the partnership reached the right audience with a message that created genuine intent. Follower counts are irrelevant if search doesn't move.</div>
+      </div>
+      <div class="metric-card" data-n="2">
+        <div class="metric-icon">💬</div>
+        <div class="metric-title">Community Mention Volume</div>
+        <div class="metric-desc">Reddit and Facebook Group mentions in the 14 days post-partnership. A successful Frequent Miler partnership generates dozens of r/awardtravel threads. A failed TikTok deal generates impressions and silence. Community mentions = real word-of-mouth, not paid amplification.</div>
+      </div>
+      <div class="metric-card" data-n="3">
+        <div class="metric-icon">📸</div>
+        <div class="metric-title">Pro Trial Activations (Per Creator UTM)</div>
+        <div class="metric-desc">"I just used FlightPoints" booking screenshots posted to Award Travel 101 or r/awardtravel — and tracked UTM-code trial signups per creator link. This is the metric that indicates the product converted, not just engaged. Attribution via Rewardful or Tolt (Stripe-native) + Dub for link infrastructure.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST SIGNALS + RED FLAGS -->
+<section class="section">
+  <div class="container">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:48px;">
+      <div>
+        <p class="section-label">Trust Framework</p>
+        <h2 class="section-title" style="font-size:clamp(22px,2.5vw,32px); margin-bottom:28px">What Makes Them Trust a Creator</h2>
+        <div class="trust-grid">
+          <div class="trust-card"><div class="trust-icon">📅</div><div><div class="trust-title">Longevity (5+ Years)</div><div class="trust-text">Gary Leff since 2002. Ben Schlappig since 2008. Cup of Jo since 2007. Track record is the ultimate credential in this community.</div></div></div>
+          <div class="trust-card"><div class="trust-icon">📊</div><div><div class="trust-title">Real Receipts & Screenshots</div><div class="trust-text">On-screen booking confirmations, specific points-and-dollar comparisons, named airline programs. No screenshots = no trust.</div></div></div>
+          <div class="trust-card"><div class="trust-icon">🎓</div><div><div class="trust-title">Professional Credentials Displayed</div><div class="trust-text">Georgetown JD (Erika Kullberg), ex-JPMorgan (Vivian Tu), ex-electrical engineer (Will Tang). Expertise is shown, not claimed.</div></div></div>
+          <div class="trust-card"><div class="trust-icon">📝</div><div><div class="trust-title">Transparent Affiliate Disclosure</div><div class="trust-text">Doctor of Credit's no-affiliate-link policy is the gold standard. Disclosed affiliates are tolerated; hidden ones are community death.</div></div></div>
+          <div class="trust-card"><div class="trust-icon">👎</div><div><div class="trust-title">Willingness to Publish Negatives</div><div class="trust-text">Josh Cahill won Best Airline Reviewer 2024 as the "honest reviewer." Critical reviews of airlines and tools build credibility paid posts destroy.</div></div></div>
+          <div class="trust-card"><div class="trust-icon">🎪</div><div><div class="trust-title">Real-World Events & Meetups</div><div class="trust-text">CardCon, ZorkFest, Chicago Seminars — attendance signals the creator is embedded in the community, not just posting from the outside.</div></div></div>
+        </div>
+      </div>
+      <div>
+        <p class="section-label">Red Flags</p>
+        <h2 class="section-title" style="font-size:clamp(22px,2.5vw,32px); margin-bottom:28px">Creator Exclusion Criteria</h2>
+        <div class="flags-grid" style="grid-template-columns:1fr;">
+          <div class="flag-card"><div class="flag-title">🚩 FTC Disclosure Violations</div><div class="flag-desc">The Travelers United complaint against The Bucket List Family alleges 232+ FTC disclosure violations. Not a final determination — but a material flag. Verify compliance rigorously before any partnership with family-focused creators.</div></div>
+          <div class="flag-card"><div class="flag-title">🚩 Pumping Highest-Paying Card Over Best Offer</div><div class="flag-desc">The cardinal sin of the points space. This community tracks affiliate structures and will call out creators whose card recommendations align suspiciously well with their affiliate earnings. A disqualifying offense.</div></div>
+          <div class="flag-card"><div class="flag-title">🚩 "10X Your Points!" Hype Framing</div><div class="flag-desc">The substance audience reads hype as scam-coded. Any creator whose primary hook is aspirational exaggeration rather than specific math and receipts will not convert FlightPoints' ICP — and may actively damage brand credibility by association.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONCLUSION -->
+<section class="conclusion">
+  <div class="container">
+    <p class="section-label" style="color:var(--accent)">Strategic Conclusion</p>
+    <h2 class="section-title">The Defining Insight</h2>
+    <p style="font-size:16px; color:rgba(245,240,232,0.72); max-width:700px; line-height:1.8; margin-bottom:32px; font-weight:300;">FlightPoints does not need to be a travel brand to win. It needs to be the tool that lifestyle-adjacent creators casually drop into the planning content their audience is already scrolling at 10pm. The FinTok salary girl, the productivity YouTuber, the Sunday-reset mom, the FIRE blogger, the golf vlogger — none of them are travel creators. All of them have the exact audience we need.</p>
+    <div class="conclusion-grid">
+      <div class="conclusion-card">
+        <div class="conclusion-card-num">01</div>
+        <div class="conclusion-card-title">The Ladder Logic</div>
+        <div class="conclusion-card-text">A 23-year-old Bain analyst follows Erika Kullberg today, joins r/awardtravel at 27, lurks in Award Travel 101 at 33, and reads Frequent Miler same-day at 47. The same human moves through every segment over 25 years. Plant seeds at the top; concentrate conversion dollars at the bottom.</div>
+      </div>
+      <div class="conclusion-card">
+        <div class="conclusion-card-num">02</div>
+        <div class="conclusion-card-title">Time Over Cost — Always</div>
+        <div class="conclusion-card-text">At $215K HHI with $300–$1,500/hr billable rates, saving $500 is less motivating than saving 6 hours. Every single piece of creator content must lead with time savings. "Stop spending your Sunday hunting award space" outperforms "Save 50,000 points" in every segment.</div>
+      </div>
+      <div class="conclusion-card">
+        <div class="conclusion-card-num">03</div>
+        <div class="conclusion-card-title">Receipts Win Everything</div>
+        <div class="conclusion-card-text">The single most consistent finding across all research: this audience trusts screenshots, dollar math, and named transfer partners — and tunes out everything else. Every creator brief must require on-screen booking confirmations, specific points-and-dollar comparisons, and named airline programs.</div>
+      </div>
+    </div>
+    <div style="margin-top:48px; padding:32px; border:1px solid rgba(245,240,232,0.12); border-radius:12px;">
+      <p style="font-size:15.5px; color:rgba(245,240,232,0.82); line-height:1.85; max-width:800px;">The plan is narrow, named, and executable: <strong style="color:var(--accent)">100–150 micro-creator activations per quarter at $0–$200 each</strong>, across 28 lifestyle-adjacent archetypes, organized into three concentric rings, with four segment-specific content tracks and a relentless bias toward time-savings messaging over cost-savings messaging. Every dollar after that is compounding brand equity — the kind that a 5-deal macro strategy can never replicate.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>FlightPoints Influencer Strategy Playbook · Research synthesized from Pew Research 2025, Edison Research, DataReportal, Social Cat 2025, IQFluence H1-2025, Influencer Marketing Hub, Bank of America Private Bank Study, Family Travel Association, Deloitte Global Surveys, Morning Consult, HypeAuditor, Sprout Social, Virtuoso, and 10xTravel Reader Survey</span>
+  <span>Confidential · Internal Use Only</span>
+</footer>
+
+<script>
+Chart.defaults.font.family = "'Inter', -apple-system, 'Helvetica Neue', sans-serif";
+Chart.defaults.color = '#6b6660';
+Chart.defaults.font.size = window.innerWidth < 640 ? 10 : 12;
+
+const isMobile = window.innerWidth < 640;
+
+new Chart(document.getElementById('platformAdoptionChart'), {
+  type:'bar',
+  data:{
+    labels:['YouTube','Facebook','Instagram','Podcasts\n(35–54)','Reddit','TikTok'],
+    datasets:[{label:'30–49 Reach / Adoption %',data:[92,80,62,61,35,44],backgroundColor:['#ff0000cc','#1877f2cc','#e1306ccc','#8940facc','#ff4500cc','#010101cc'],borderRadius:5,borderSkipped:false}]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{beginAtZero:true,max:100,ticks:{callback:v=>v+'%',font:{size:isMobile?9:11}},grid:{color:'rgba(0,0,0,0.05)'}},
+      x:{grid:{display:false},ticks:{font:{size:isMobile?9:11},maxRotation:isMobile?45:0}}
+    }
+  }
+});
+
+new Chart(document.getElementById('incomeAdoptionChart'), {
+  type:'bar',
+  data:{
+    labels:['YouTube','Facebook','Instagram','Reddit','TikTok'],
+    datasets:[{label:'$100K+ HHI Adoption %',data:[89,71,60,37,30],backgroundColor:['#e8510a','#e8510a','#e8510a','#e8510a','rgba(232,81,10,0.28)'],borderRadius:5,borderSkipped:false}]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{beginAtZero:true,max:100,ticks:{callback:v=>v+'%',font:{size:isMobile?9:11}},grid:{color:'rgba(0,0,0,0.05)'}},
+      x:{grid:{display:false},ticks:{font:{size:isMobile?9:11}}}
+    }
+  }
+});
+
+new Chart(document.getElementById('funnelChart'), {
+  type:'bar',
+  data:{
+    labels: isMobile
+      ? ['YT','FB Groups','Pods','News','IG Reels','IG Cars','TikTok','Reddit']
+      : ['YouTube','Facebook Groups','Podcasts','Newsletters','Instagram Reels','Instagram Carousels','TikTok','Reddit'],
+    datasets:[
+      {label:'Awareness',data:[8,3,5,4,10,6,10,4],backgroundColor:'rgba(124,58,237,0.72)',borderRadius:3},
+      {label:'Consideration',data:[9,7,8,8,5,9,4,6],backgroundColor:'rgba(14,165,233,0.72)',borderRadius:3},
+      {label:'Conversion',data:[9,10,10,10,3,7,2,9],backgroundColor:'rgba(232,81,10,0.82)',borderRadius:3},
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{position:'top',labels:{font:{size:isMobile?9:11},boxWidth:isMobile?10:14,padding:isMobile?8:16}}},
+    scales:{
+      x:{stacked:true,grid:{display:false},ticks:{font:{size:isMobile?8:11},maxRotation:isMobile?45:0}},
+      y:{stacked:true,grid:{color:'rgba(0,0,0,0.05)'},ticks:{display:false}}
+    }
+  }
+});
+
+new Chart(document.getElementById('budgetPieChart'), {
+  type:'doughnut',
+  data:{
+    labels:['Climbing Optimizer 28–37','Veteran Hobbyist 42–50','Family Optimizer 35–45','Aspiring Optimizer 21–28'],
+    datasets:[{data:[35,25,25,15],backgroundColor:['#0ea5e9','#e8510a','#16a34a','#7c3aed'],borderWidth:0,hoverOffset:8}]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    cutout:'64%',
+    plugins:{
+      legend:{
+        position:'bottom',
+        labels:{
+          padding:isMobile?8:14,
+          font:{size:isMobile?9:11},
+          boxWidth:isMobile?10:14,
+          generateLabels: function(chart) {
+            const data = chart.data;
+            return data.labels.map((label, i) => ({
+              text: isMobile ? label.replace('Optimizer','Opt.').replace('Hobbyist','Hob.') : label,
+              fillStyle: data.datasets[0].backgroundColor[i],
+              hidden: false,
+              index: i
+            }));
+          }
+        }
+      }
+    }
+  }
+});
+
+function showSeg(n) {
+  document.querySelectorAll('.segment-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.seg-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('seg-'+n).classList.add('active');
+  document.querySelector('[data-seg="'+n+'"]').classList.add('active');
+}
+
+function showInner(seg, tab) {
+  const panel = document.getElementById('seg-'+seg);
+  panel.querySelectorAll('.inner-panel').forEach(p=>p.classList.remove('active'));
+  panel.querySelectorAll('.inner-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('seg'+seg+'-'+tab).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
